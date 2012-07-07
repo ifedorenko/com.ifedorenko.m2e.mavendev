@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension
+        point="org.eclipse.m2e.launching.mavenLaunchParticipants">
+     <mavenLaunchParticipant
+           class="com.ifedorenko.m2e.tychodev.internal.MavenLaunchParticipant"
+           id="com.ifedorenko.m2e.tychodev.mavenLaunchParticipant"
+           modes="run,debug"
+           name="Tycho Launch Participant">
+     </mavenLaunchParticipant>
+  </extension>
+  <extension
+        point="org.eclipse.ui.preferencePages">
+     <page
+           category="org.eclipse.m2e.core.preferences.Maven2PreferencePage"
+           class="com.ifedorenko.m2e.tychodev.internal.ui.TychoPreferencePage"
+           id="com.ifedorenko.m2e.tychodev"
+           name="Tycho development support">
+     </page>
+  </extension>
+  <extension
+        point="org.eclipse.debug.core.launchConfigurationTypes">
+     <launchConfigurationType
+           delegate="com.ifedorenko.m2e.tychodev.internal.launching.TychoITLaunchConfigurationDelegate"
+           id="com.ifedorenko.m2e.tychodev.itLaunchType"
+           modes="run,debug"
+           name="Tycho Integration Test"
+           public="true"
+           sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+           sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
+     </launchConfigurationType>
+  </extension>
+  <extension
+        point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+     <launchConfigurationTabGroup
+           class="com.ifedorenko.m2e.tychodev.internal.launching.TychoITLaunchConfigurationTabGroup"
+           id="com.ifedorenko.m2e.tychodev.itLaunchTabGroup"
+           type="com.ifedorenko.m2e.tychodev.itLaunchType">
+     </launchConfigurationTabGroup>
+  </extension>
+</plugin>

@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.ifedorenko.m2e</groupId>
+  <artifactId>com.ifedorenko.m2e.tychodev-parent</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <properties>
+    <tycho-version>0.15.0</tycho-version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>eclipse</id>
+      <url>http://download.eclipse.org/releases/juno</url>
+      <layout>p2</layout>
+    </repository>
+    <repository>
+      <id>m2e-tycho</id>
+      <url>https://repository.sonatype.org/content/repositories/forge-sites/m2eclipse-tycho/0.6.0/N/0.6.0.201205210032/</url>
+      <layout>p2</layout>
+    </repository>
+    <repository>
+      <id>ifedorenk-m2e-extras</id>
+      <url>http://ifedorenko.github.com/m2e-extras</url>
+      <layout>p2</layout>
+    </repository>
+  </repositories>
+
+
+  <modules>
+    <module>com.ifedorenko.m2e.tychodev</module>
+    <module>com.ifedorenko.m2e.tychodev.feature</module>
+  </modules>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho-version}</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
