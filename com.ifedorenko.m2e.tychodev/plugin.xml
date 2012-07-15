@@ -39,4 +39,12 @@
            type="com.ifedorenko.m2e.tychodev.itLaunchType">
      </launchConfigurationTabGroup>
   </extension>
+   <extension point="org.eclipse.jdt.launching.classpathProviders">
+      <classpathProvider 
+          id="com.ifedorenko.m2e.tychodev.ITClasspathProvider"
+          class="com.ifedorenko.m2e.tychodev.internal.launching.TychoITClasspathProvider"/>
+      <classpathProvider 
+          id="com.ifedorenko.m2e.tychodev.ITSourcepathProvider"
+          class="com.ifedorenko.m2e.tychodev.internal.launching.TychoITSourcepathProvider"/>
+   </extension>
 </plugin>

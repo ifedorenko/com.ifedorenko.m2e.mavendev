@@ -31,7 +31,6 @@ import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
-import org.eclipse.m2e.jdt.internal.launch.MavenRuntimeClasspathProvider;
 
 @SuppressWarnings( "restriction" )
 public class TychoITLaunchConfigurationTabGroup
@@ -75,7 +74,7 @@ public class TychoITLaunchConfigurationTabGroup
         }
 
         IMavenProjectFacade facade = //
-            MavenPlugin.getMavenProjectRegistry().create( project, new NullProgressMonitor() );// XXX yikes
+            MavenPlugin.getMavenProjectRegistry().create( project, new NullProgressMonitor() ); // XXX yikes
 
         if ( facade == null )
         {
@@ -88,8 +87,8 @@ public class TychoITLaunchConfigurationTabGroup
                                     resolverConfiguration.shouldResolveWorkspaceProjects() );
 
         configuration.setAttribute( IJavaLaunchConfigurationConstants.ATTR_CLASSPATH_PROVIDER,
-                                    MavenRuntimeClasspathProvider.MAVEN_CLASSPATH_PROVIDER );
+                                    TychoITClasspathProvider.TYCHOIT_CLASSPATH_PROVIDER );
         configuration.setAttribute( IJavaLaunchConfigurationConstants.ATTR_SOURCE_PATH_PROVIDER,
-                                    MavenRuntimeClasspathProvider.MAVEN_SOURCEPATH_PROVIDER );
+                                    TychoITSourcepathProvider.TYCHOIT_SOURCEPATH_PROVIDER );
     }
 }

@@ -54,13 +54,27 @@ import org.sonatype.tycho.m2e.internal.M2ETychoActivator;
 public class MavenLaunchParticipant
     implements IMavenLaunchParticipant
 {
+    /**
+     * Key suffix corresponding to project basedir, i.e. parent directory of .project and pom.xml files
+     */
     private static final String SUFFIX_BASEDIR = ":basedir";
 
+    /**
+     * Key suffix corresponding to bundle location, i.e. parent directory of META-INF/MANIFEST.MF
+     */
     private static final String SUFFIX_LOCATION = ":location";
 
+    /**
+     * Key suffix corresponding to comma-separated list of additional bundle classpath entries
+     */
     private static final String SUFFIX_ENTRIES = ":entries";
 
-    private static final String SYSPROP_STATELOCATION = "m2etycho.workspace.state";
+    /**
+     * Location of m2e.tycho workspace state location.
+     * <p/>
+     * Value must match among tycho-insitu, WorkspaceDependencyResolver and AbstractTychoIntegrationTest.
+     */
+    private static final String SYSPROP_STATELOCATION = "tycho.insitu.workspace.state";
 
     private static final String FILE_WORKSPACESTATE = "workspacestate.properties";
 

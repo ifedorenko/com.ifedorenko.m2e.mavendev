@@ -23,6 +23,7 @@ import org.eclipse.jdt.junit.launcher.JUnitLaunchConfigurationDelegate;
 import org.eclipse.m2e.internal.launch.IMavenLaunchParticipant;
 
 import com.ifedorenko.m2e.sourcelookup.internal.SourceLookupMavenLaunchParticipant;
+import com.ifedorenko.m2e.tychodev.internal.MavenLaunchParticipant;
 
 @SuppressWarnings( "restriction" )
 public class TychoITLaunchConfigurationDelegate
@@ -34,6 +35,8 @@ public class TychoITLaunchConfigurationDelegate
     private IProgressMonitor monitor;
 
     private static final SourceLookupMavenLaunchParticipant sourcelookup = new SourceLookupMavenLaunchParticipant();
+
+    private static final MavenLaunchParticipant launchParicipant = new MavenLaunchParticipant();
 
     @Override
     public synchronized void launch( ILaunchConfiguration configuration, String mode, ILaunch launch,
@@ -62,6 +65,9 @@ public class TychoITLaunchConfigurationDelegate
         sourceLocator.setSourcePathComputer( getLaunchManager().getSourcePathComputer( "org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer" ) );
         sourceLocator.initializeDefaults( configuration );
 
+        // default java source lookup participant is broken, https://bugs.eclipse.org/bugs/show_bug.cgi?id=368212
+        sourceLocator.removeParticipants( sourceLocator.getParticipants() );
+
         addSourceLookupParticipants( configuration, launch, sourceLocator, sourcelookup );
 
         launch.setSourceLocator( sourceLocator );
@@ -85,6 +91,7 @@ public class TychoITLaunchConfigurationDelegate
         StringBuilder vmargs = new StringBuilder();
         append( vmargs, super.getVMArguments( configuration ) );
         append( vmargs, sourcelookup.getVMArguments( configuration, launch, monitor ) );
+        append( vmargs, launchParicipant.getVMArguments( configuration, launch, monitor ) );
         return vmargs.toString();
     }
 
