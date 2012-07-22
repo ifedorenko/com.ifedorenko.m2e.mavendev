@@ -16,10 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -28,12 +26,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.core.DebugEvent;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -72,9 +66,9 @@ public class MavenLaunchParticipant
     /**
      * Location of m2e.tycho workspace state location.
      * <p/>
-     * Value must match among tycho-insitu, WorkspaceDependencyResolver and AbstractTychoIntegrationTest.
+     * Value must match among tycho-insitu, DevelopmentWorkspaceState and AbstractTychoIntegrationTest.
      */
-    private static final String SYSPROP_STATELOCATION = "tycho.insitu.workspace.state";
+    private static final String SYSPROP_STATELOCATION = "tychodev.workspace.state";
 
     private static final String FILE_WORKSPACESTATE = "workspacestate.properties";
 
@@ -205,53 +199,13 @@ public class MavenLaunchParticipant
         return folder.getLocation();
     }
 
-    private void cleanupOnTerminate( final ILaunch launch, final File stateLocation )
+    private static void cleanupOnTerminate( final ILaunch launch, final File stateLocation )
     {
-        DebugPlugin.getDefault().addDebugEventListener( new IDebugEventSetListener()
+        LaunchUtils.onTerminate( launch, new Runnable()
         {
-            private Set<IProcess> processes = new HashSet<IProcess>();
-
             @Override
-            public void handleDebugEvents( DebugEvent[] events )
+            public void run()
             {
-                for ( DebugEvent event : events )
-                {
-                    if ( event.getSource() instanceof IProcess )
-                    {
-                        IProcess process = (IProcess) event.getSource();
-                        if ( process.getLaunch() == launch ) // TODO should it be #equals instead?
-                        {
-                            switch ( event.getKind() )
-                            {
-                                case DebugEvent.TERMINATE:
-                                    processTerminated( process );
-                                    break;
-                                case DebugEvent.CREATE:
-                                    processCreated( process );
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            private void processCreated( IProcess process )
-            {
-                processes.add( process );
-            }
-
-            private void processTerminated( IProcess process )
-            {
-                processes.remove( process );
-                if ( processes.isEmpty() )
-                {
-                    launchTerminated();
-                }
-            }
-
-            private void launchTerminated()
-            {
-                DebugPlugin.getDefault().removeDebugEventListener( this );
                 try
                 {
                     FileUtils.deleteDirectory( stateLocation );
