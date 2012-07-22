@@ -55,6 +55,8 @@ public class TychoITLaunchConfigurationDelegate
     extends JUnitLaunchConfigurationDelegate
     implements ILaunchConfigurationDelegate
 {
+    public static final String ATTR_TEST_TARGETPLATFORM = "tychodev-testTargetPlatform";
+
     private ILaunch launch;
 
     private IProgressMonitor monitor;
@@ -123,6 +125,12 @@ public class TychoITLaunchConfigurationDelegate
         append( vmargs, "-Dtychodev-maven.home=" + runtime.getLocation() );
         append( vmargs, "-Dtychodev-maven.ext.class.path=" + MavenLaunchUtils.getCliResolver( runtime ) );
         append( vmargs, "-Dtychodev-cp=" + getTestClasspath( configuration ) );
+
+        String testTargetPlatform = configuration.getAttribute( ATTR_TEST_TARGETPLATFORM, (String) null );
+        if ( testTargetPlatform != null )
+        {
+            append( vmargs, "-Dtychodev-testTargetPlatform=" + testTargetPlatform );
+        }
 
         append( vmargs, sourcelookup.getVMArguments( configuration, launch, monitor ) );
         append( vmargs, launchParicipant.getVMArguments( configuration, launch, monitor ) );
@@ -207,7 +215,7 @@ public class TychoITLaunchConfigurationDelegate
         return cp.toString();
     }
 
-    void addClasspath( StringBuilder cp, Set<String> set, String location )
+    private void addClasspath( StringBuilder cp, Set<String> set, String location )
     {
         if ( location != null && set.add( location ) )
         {

@@ -40,9 +40,15 @@ public class TychoITLaunchConfigurationTabGroup
     @Override
     public void createTabs( ILaunchConfigurationDialog dialog, String mode )
     {
-        ILaunchConfigurationTab[] tabs =
-            new ILaunchConfigurationTab[] { new JUnitLaunchConfigurationTab(), new JavaArgumentsTab(),
-                new JavaClasspathTab(), new JavaJRETab(), new SourceLookupTab(), new EnvironmentTab(), new CommonTab() };
+        ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] { //
+            new JUnitLaunchConfigurationTab(), //
+                new JavaArgumentsTab(), //
+                new TychoITLaunchConfigurationTab(), //
+                new JavaClasspathTab(), //
+                new JavaJRETab(), //
+                new SourceLookupTab(), //
+                new EnvironmentTab(), //
+                new CommonTab() };
         setTabs( tabs );
     }
 

@@ -112,9 +112,11 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node CREATED="1342697473193" ID="ID_325656276" MODIFIED="1342987919417" TEXT="many ITs require local eclipse installation as target platform">
+<icon BUILTIN="button_ok"/>
+</node>
 <node CREATED="1342354892283" ID="ID_814665796" MODIFIED="1342960020730" TEXT="RunAs and DebugAs shortcuts"/>
 <node CREATED="1342966146533" ID="ID_1370258272" MODIFIED="1342966165745" TEXT="can&apos;t use EMBEDDED m2e maven runtime to lauch Tycho ITs"/>
-<node CREATED="1342697473193" ID="ID_325656276" MODIFIED="1342960016461" TEXT="many ITs require local eclipse installation as target platform"/>
 <node CREATED="1342870559138" ID="ID_754914029" MODIFIED="1342960009532" TEXT="ITs projects are copied to tycho-its/projects instead of tycho-its/target/projects"/>
 <node CREATED="1342886154910" ID="ID_575204933" MODIFIED="1342886176022" TEXT="when running ITs from Eclipse, tee maven output too console"/>
 <node CREATED="1342887220165" ID="ID_1083280679" MODIFIED="1342887236994" TEXT="don&apos;t enable source code lookup javaagent unless in debug mode"/>
