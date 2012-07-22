@@ -11,6 +11,8 @@
 package com.ifedorenko.m2e.tychodev.internal.launching;
 
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +37,7 @@ import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.m2e.internal.launch.IMavenLaunchParticipant;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
 import org.eclipse.osgi.internal.baseadaptor.DevClassPathHelper;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.osgi.framework.Bundle;
 
 import com.ifedorenko.m2e.sourcelookup.internal.SourceLookupMavenLaunchParticipant;
@@ -226,4 +229,31 @@ public class TychoITLaunchConfigurationDelegate
             cp.append( location );
         }
     }
+
+    static String getDefaultTestTargetPlatform()
+    {
+        Location platformLocation = Platform.getInstallLocation();
+
+        if ( platformLocation == null )
+        {
+            return null;
+        }
+
+        URL url = platformLocation.getURL();
+
+        if ( "file".equals( url.getProtocol() ) )
+        {
+            try
+            {
+                return new File( url.toURI() ).getAbsolutePath();
+            }
+            catch ( URISyntaxException e )
+            {
+                // ignored
+            }
+        }
+
+        return null;
+    }
+
 }

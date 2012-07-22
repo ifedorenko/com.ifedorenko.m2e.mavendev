@@ -11,17 +11,12 @@
 package com.ifedorenko.m2e.tychodev.internal.launching;
 
 import static com.ifedorenko.m2e.tychodev.internal.launching.TychoITLaunchConfigurationDelegate.ATTR_TEST_TARGETPLATFORM;
-
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
+import static com.ifedorenko.m2e.tychodev.internal.launching.TychoITLaunchConfigurationDelegate.getDefaultTestTargetPlatform;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
-import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -132,32 +127,6 @@ public class TychoITLaunchConfigurationTab
         }
 
         return getDefaultTestTargetPlatform();
-    }
-
-    private String getDefaultTestTargetPlatform()
-    {
-        Location platformLocation = Platform.getInstallLocation();
-
-        if ( platformLocation == null )
-        {
-            return null;
-        }
-
-        URL url = platformLocation.getURL();
-
-        if ( "file".equals( url.getProtocol() ) )
-        {
-            try
-            {
-                return new File( url.toURI() ).getAbsolutePath();
-            }
-            catch ( URISyntaxException e )
-            {
-                // ignored
-            }
-        }
-
-        return null;
     }
 
     @Override

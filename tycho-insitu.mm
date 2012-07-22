@@ -21,7 +21,7 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1342353907575" ID="ID_1444126652" MODIFIED="1342354281641" TEXT="forkJvm=false when running from tycho-insitu">
+<node CREATED="1342353907575" ID="ID_1444126652" MODIFIED="1342988007404" TEXT="forkJvm=false when running from tycho-insitu">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -38,6 +38,7 @@
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1342353970573" ID="ID_1879659168" MODIFIED="1342958720796" TEXT="verify this works for each individual test suite">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -115,9 +116,11 @@
 <node CREATED="1342697473193" ID="ID_325656276" MODIFIED="1342987919417" TEXT="many ITs require local eclipse installation as target platform">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1342354892283" ID="ID_814665796" MODIFIED="1342960020730" TEXT="RunAs and DebugAs shortcuts"/>
+<node CREATED="1342354892283" ID="ID_814665796" MODIFIED="1342995169819" TEXT="RunAs and DebugAs shortcuts">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1342870559138" ID="ID_754914029" MODIFIED="1342987977556" TEXT="ITs projects are copied to tycho-its/projects instead of tycho-its/target/projects"/>
 <node CREATED="1342966146533" ID="ID_1370258272" MODIFIED="1342966165745" TEXT="can&apos;t use EMBEDDED m2e maven runtime to lauch Tycho ITs"/>
-<node CREATED="1342870559138" ID="ID_754914029" MODIFIED="1342960009532" TEXT="ITs projects are copied to tycho-its/projects instead of tycho-its/target/projects"/>
 <node CREATED="1342886154910" ID="ID_575204933" MODIFIED="1342886176022" TEXT="when running ITs from Eclipse, tee maven output too console"/>
 <node CREATED="1342887220165" ID="ID_1083280679" MODIFIED="1342887236994" TEXT="don&apos;t enable source code lookup javaagent unless in debug mode"/>
 <node CREATED="1342886742805" ID="ID_302914518" MODIFIED="1342886766629" TEXT="Source lookup is messed up for classes from JRE"/>
@@ -146,6 +149,7 @@
 </html>
 </richcontent>
 </node>
+<node CREATED="1342991132780" ID="ID_1051388209" MODIFIED="1342991161882" TEXT="Make Maven runtime configurable in launch configuration GUI"/>
 <node CREATED="1342958776486" ID="ID_215756189" MODIFIED="1342966344964" TEXT="can&apos;t run all ITs due to OOME permgen">
 <node CREATED="1342886693958" ID="ID_63117409" MODIFIED="1342983587230" TEXT="MavenCli does not dispose plexus container when embedded in verifier"/>
 <node CREATED="1342886541433" ID="ID_5933656" MODIFIED="1342886600608" TEXT="DefaultArtifactResolver is not properly disposed and leaks threads, workaround -Dmaven.artifact.threads=1"/>

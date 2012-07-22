@@ -5,19 +5,11 @@
       version="0.1.0.qualifier"
       provider-name="Igor Fedorenko">
 
-   <description>
-   </description>
-
-   <copyright>
-   </copyright>
-
-   <license>
-   </license>
-
    <requires>
       <import feature="org.eclipse.pde" version="3.8.0" match="compatible"/>
       <import feature="org.sonatype.tycho.m2e.feature" version="0.6.0" match="compatible"/>
       <import feature="com.ifedorenko.m2e.sourcelookup.feature" version="1.0.0" match="compatible"/>
+      <import feature="org.eclipse.jdt" version="3.8.0" match="compatible"/>
    </requires>
 
    <plugin
