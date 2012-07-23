@@ -12,6 +12,7 @@ https://github.com/ifedorenko/com.ifedorenko.m2e.sourcelookup.
 # Installation and configuration
 
 * Install m2e 1.1 or better from http://www.eclipse.org/m2e/download/
+* Install latest m2e-tycho from http://repository.tesla.io:8081/nexus/content/sites/m2e.extras/m2eclipse-tycho/0.6.0/
 * Install Dynamic Sources Lookup m2e and Tycho Development Support extensions from 
   http://ifedorenko.github.com/m2e-extras/
 
