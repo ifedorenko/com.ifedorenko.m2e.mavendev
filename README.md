@@ -20,7 +20,7 @@ https://github.com/ifedorenko/com.ifedorenko.m2e.sourcelookup.
 
 * Workspace dependency resolution is disable for Run As Maven Build launch configurations by default.
   Enable it on "Main" launch configuration tab. Make sure the build uses workspace Tycho version
-  ![Maven launch configuration Main tab](EnableWorkspaceDependencyResolution.png)
+  ![Maven launch configuration Main tab](https://github.com/ifedorenko/com.ifedorenko.m2e.tychodev/blob/master/EnableWorkspaceDependencyResolution.png)
 
 * Run As Tycho IT has workspace dependency resolution enabled and does not require any configuration.
 
