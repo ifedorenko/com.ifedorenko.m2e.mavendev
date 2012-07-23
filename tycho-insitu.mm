@@ -113,18 +113,42 @@
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1342697473193" ID="ID_325656276" MODIFIED="1342987919417" TEXT="many ITs require local eclipse installation as target platform">
+<node CREATED="1342697473193" ID="ID_325656276" MODIFIED="1342995244623" TEXT="many ITs require local eclipse installation as target platform">
+<font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1342354892283" ID="ID_814665796" MODIFIED="1342995169819" TEXT="RunAs and DebugAs shortcuts">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1342870559138" ID="ID_754914029" MODIFIED="1342987977556" TEXT="ITs projects are copied to tycho-its/projects instead of tycho-its/target/projects"/>
-<node CREATED="1342966146533" ID="ID_1370258272" MODIFIED="1342966165745" TEXT="can&apos;t use EMBEDDED m2e maven runtime to lauch Tycho ITs"/>
-<node CREATED="1342886154910" ID="ID_575204933" MODIFIED="1342886176022" TEXT="when running ITs from Eclipse, tee maven output too console"/>
-<node CREATED="1342887220165" ID="ID_1083280679" MODIFIED="1342887236994" TEXT="don&apos;t enable source code lookup javaagent unless in debug mode"/>
-<node CREATED="1342886742805" ID="ID_302914518" MODIFIED="1342886766629" TEXT="Source lookup is messed up for classes from JRE"/>
-<node CREATED="1342889862027" ID="ID_867121639" MODIFIED="1342959044477" TEXT="consolidate handling of dev.properties and platform properties">
+<node CREATED="1342870559138" ID="ID_754914029" MODIFIED="1343010599309" TEXT="ITs projects are copied to tycho-its/projects instead of tycho-its/target/projects">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Looks like a bug in Package explorer, it shows two tycho-its/projects folders, one apparently &quot;shadow&quot; of tycho-its/target/projects. Everything looks proper on filesystem.
+    </p>
+  </body>
+</html>
+</richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1342966146533" ID="ID_1370258272" MODIFIED="1342995307405" TEXT="can&apos;t use EMBEDDED m2e maven runtime to lauch Tycho ITs">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1342886154910" ID="ID_575204933" MODIFIED="1342995308540" TEXT="when running ITs from Eclipse, tee maven output too console">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1342887220165" ID="ID_1083280679" MODIFIED="1342995309589" TEXT="don&apos;t enable source code lookup javaagent unless in debug mode">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1342886742805" ID="ID_302914518" MODIFIED="1343011598198" TEXT="Source lookup is messed up for classes from JRE">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1342889862027" ID="ID_867121639" MODIFIED="1342995312100" TEXT="consolidate handling of dev.properties and platform properties">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -148,8 +172,11 @@
   </body>
 </html>
 </richcontent>
+<font NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1342991132780" ID="ID_1051388209" MODIFIED="1342991161882" TEXT="Make Maven runtime configurable in launch configuration GUI"/>
+<node CREATED="1342991132780" ID="ID_1051388209" MODIFIED="1342995313565" TEXT="Make Maven runtime configurable in launch configuration GUI">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
 <node CREATED="1342958776486" ID="ID_215756189" MODIFIED="1342966344964" TEXT="can&apos;t run all ITs due to OOME permgen">
 <node CREATED="1342886693958" ID="ID_63117409" MODIFIED="1342983587230" TEXT="MavenCli does not dispose plexus container when embedded in verifier"/>
 <node CREATED="1342886541433" ID="ID_5933656" MODIFIED="1342886600608" TEXT="DefaultArtifactResolver is not properly disposed and leaks threads, workaround -Dmaven.artifact.threads=1"/>
@@ -208,12 +235,14 @@
 </richcontent>
 </node>
 </node>
-<node CREATED="1342703892799" ID="ID_1312341174" MODIFIED="1342703932289" TEXT="Share state location between MavenLaunchParticipant and TychoITLaunchConfigurationDelegate"/>
+<node CREATED="1342703892799" ID="ID_1312341174" MODIFIED="1342995315524" TEXT="Share state location between MavenLaunchParticipant and TychoITLaunchConfigurationDelegate">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
 </node>
 <node CREATED="1342289371861" HGAP="23" ID="ID_1664503299" MODIFIED="1342353690436" POSITION="left" TEXT="source lookup can&apos;t determine GAV of clsses form target/test-classes">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1342355097617" ID="ID_95971448" MODIFIED="1342355297844" POSITION="right" TEXT="option to disable mangle of standard java jsr45 strata">
+<node CREATED="1342355097617" ID="ID_95971448" MODIFIED="1342995320292" POSITION="right" TEXT="option to disable mangle of standard java jsr45 strata">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -227,11 +256,12 @@
     </p>
   </body>
 </html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
 </node>
 <node CREATED="1342355308218" ID="ID_1030545337" MODIFIED="1342355816318" POSITION="right" TEXT="remove workspace preference, tycho-insitu is on by default">
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1342710046358" ID="ID_379314167" MODIFIED="1342710097755" POSITION="right" TEXT="Import is binary maven project">
+<node CREATED="1342710046358" ID="ID_379314167" MODIFIED="1342995321765" POSITION="right" TEXT="Import is binary maven project">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -243,7 +273,10 @@
   </body>
 </html>
 </richcontent>
+<font NAME="SansSerif" SIZE="12"/>
 </node>
-<node CREATED="1342753985673" ID="ID_617962526" MODIFIED="1342754364089" POSITION="left" TEXT="tycho-p2 runtime needs config.ini to start bundles when launching p2 in external jvm"/>
+<node CREATED="1342753985673" ID="ID_617962526" MODIFIED="1342995316892" POSITION="left" TEXT="tycho-p2 runtime needs config.ini to start bundles when launching p2 in external jvm">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
 </node>
 </map>

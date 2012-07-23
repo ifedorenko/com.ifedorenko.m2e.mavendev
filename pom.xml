@@ -19,7 +19,7 @@
     </repository>
     <repository>
       <id>m2e-tycho</id>
-      <url>https://repository.sonatype.org/content/repositories/forge-sites/m2eclipse-tycho/0.6.0/N/0.6.0.201205210032/</url>
+      <url>http://repository.tesla.io:8081/nexus/content/sites/m2e.extras/m2eclipse-tycho/0.6.0/N/0.6.0.201207041401/</url>
       <layout>p2</layout>
     </repository>
     <repository>
@@ -29,12 +29,11 @@
     </repository>
   </repositories>
 
-
   <modules>
     <module>com.ifedorenko.m2e.tychodev</module>
+    <module>com.ifedorenko.m2e.tychodev.junit.runtime</module>
     <module>com.ifedorenko.m2e.tychodev.feature</module>
   </modules>
-
 
   <build>
     <plugins>
