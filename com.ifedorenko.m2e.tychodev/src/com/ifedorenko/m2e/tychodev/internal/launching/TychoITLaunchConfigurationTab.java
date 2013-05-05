@@ -17,6 +17,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.m2e.ui.internal.launch.MavenRuntimeSelector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -28,10 +31,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 
+@SuppressWarnings( "restriction" )
 public class TychoITLaunchConfigurationTab
     extends AbstractLaunchConfigurationTab
 {
     private Combo combo;
+
+    private MavenRuntimeSelector runtimeSelector;
 
     /**
      * @wbp.parser.entryPoint
@@ -42,6 +48,16 @@ public class TychoITLaunchConfigurationTab
         Composite composite = new Composite( parent, SWT.NONE );
         setControl( composite );
         composite.setLayout( new GridLayout( 4, false ) );
+
+        runtimeSelector = new MavenRuntimeSelector( composite );
+        runtimeSelector.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false, false, 4, 1 ) );
+        runtimeSelector.addSelectionChangedListener( new ISelectionChangedListener()
+        {
+            public void selectionChanged( SelectionChangedEvent event )
+            {
+                entriesChanged();
+            }
+        } );
 
         Label lblTestTargetPlatform = new Label( composite, SWT.NONE );
         lblTestTargetPlatform.setToolTipText( "Many Tycho ITs still require local Eclipse installation as test target platform" );
@@ -79,6 +95,11 @@ public class TychoITLaunchConfigurationTab
     void setLocation( String location )
     {
         combo.setText( location );
+        entriesChanged();
+    }
+
+    void entriesChanged()
+    {
         setDirty( true );
         updateLaunchConfigurationDialog();
     }
@@ -101,6 +122,8 @@ public class TychoITLaunchConfigurationTab
         {
             // ignored
         }
+
+        runtimeSelector.initializeFrom( configuration );
     }
 
     @Override
@@ -114,6 +137,8 @@ public class TychoITLaunchConfigurationTab
         {
             configuration.removeAttribute( ATTR_TEST_TARGETPLATFORM );
         }
+
+        runtimeSelector.performApply( configuration );
     }
 
     private String getTestTargetPlatform( ILaunchConfiguration configuration )

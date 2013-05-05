@@ -53,7 +53,7 @@
                	  <iterate>
                      <adapt type="org.eclipse.jdt.core.IJavaElement">
 		                <test property="org.eclipse.jdt.core.isInJavaProject"/>
-		                <test property="org.eclipse.jdt.core.hasTypeOnClasspath" value="org.eclipse.tycho.test.AbstractTychoIntegrationTest"/>
+		                <test property="org.eclipse.jdt.core.hasTypeOnClasspath" value="org.apache.maven.it.Verifier"/>
 		                <test property="org.eclipse.jdt.junit.canLaunchAsJUnit" forcePluginActivation="true"/>
 		             </adapt>
 		          </iterate>
