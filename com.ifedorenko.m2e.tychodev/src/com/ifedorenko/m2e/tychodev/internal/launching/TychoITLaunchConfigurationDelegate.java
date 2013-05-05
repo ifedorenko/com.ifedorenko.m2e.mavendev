@@ -25,12 +25,10 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
-import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.junit.launcher.ITestKind;
 import org.eclipse.jdt.internal.junit.launcher.JUnitLaunchConfigurationConstants;
 import org.eclipse.jdt.internal.junit.launcher.JUnitRuntimeClasspathEntry;
-import org.eclipse.jdt.internal.launching.JavaSourceLookupDirector;
 import org.eclipse.jdt.junit.launcher.JUnitLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMRunner;
@@ -38,7 +36,6 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.MavenRuntime;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.eclipse.m2e.internal.launch.IMavenLaunchParticipant;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
@@ -72,8 +69,6 @@ public class TychoITLaunchConfigurationDelegate
 
     private MavenRuntimeLaunchSupport launchSupport;
 
-    private static final SourceLookupMavenLaunchParticipant sourcelookup = new SourceLookupMavenLaunchParticipant();
-
     private static final MavenLaunchParticipant launchParicipant = new MavenLaunchParticipant();
 
     @Override
@@ -86,7 +81,7 @@ public class TychoITLaunchConfigurationDelegate
         this.launchSupport = MavenRuntimeLaunchSupport.create( configuration, launch, monitor );
         try
         {
-            setSourceLocator( configuration, launch );
+            launch.setSourceLocator( SourceLookupMavenLaunchParticipant.newSourceLocator( mode ) );
 
             super.launch( configuration, mode, launch, monitor );
         }
@@ -94,32 +89,6 @@ public class TychoITLaunchConfigurationDelegate
         {
             this.launch = null;
             this.monitor = null;
-        }
-    }
-
-    private void setSourceLocator( ILaunchConfiguration configuration, ILaunch launch )
-        throws CoreException
-    {
-        JavaSourceLookupDirector sourceLocator = new JavaSourceLookupDirector();
-        sourceLocator.setSourcePathComputer( getLaunchManager().getSourcePathComputer( "org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer" ) );
-        sourceLocator.initializeDefaults( configuration );
-
-        // default java source lookup participant is broken, https://bugs.eclipse.org/bugs/show_bug.cgi?id=368212
-        sourceLocator.removeParticipants( sourceLocator.getParticipants() );
-
-        addSourceLookupParticipants( configuration, launch, sourceLocator, sourcelookup );
-
-        launch.setSourceLocator( sourceLocator );
-    }
-
-    void addSourceLookupParticipants( ILaunchConfiguration configuration, ILaunch launch,
-                                      JavaSourceLookupDirector sourceLocator, IMavenLaunchParticipant participant )
-    {
-        List<ISourceLookupParticipant> sourceLookupParticipants =
-            participant.getSourceLookupParticipants( configuration, launch, monitor );
-        if ( sourceLookupParticipants != null )
-        {
-            sourceLocator.addParticipants( sourceLookupParticipants.toArray( new ISourceLookupParticipant[sourceLookupParticipants.size()] ) );
         }
     }
 
@@ -146,7 +115,7 @@ public class TychoITLaunchConfigurationDelegate
             arguments.appendProperty( "tychodev-testTargetPlatform", testTargetPlatform );
         }
 
-        arguments.append( sourcelookup.getVMArguments( configuration, launch, monitor ) );
+        arguments.append( SourceLookupMavenLaunchParticipant.getVMArguments() );
         arguments.append( launchParicipant.getVMArguments( configuration, launch, monitor ) );
 
         // last, so user can override standard arguments
