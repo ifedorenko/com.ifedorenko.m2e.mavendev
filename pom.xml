@@ -4,22 +4,27 @@
 
   <groupId>com.ifedorenko.m2e</groupId>
   <artifactId>com.ifedorenko.m2e.tychodev-parent</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
-    <tycho-version>0.15.0</tycho-version>
+    <tycho-version>0.17.0</tycho-version>
   </properties>
 
   <repositories>
     <repository>
       <id>eclipse</id>
-      <url>http://download.eclipse.org/releases/juno</url>
+      <url>http://download.eclipse.org/releases/kepler</url>
+      <layout>p2</layout>
+    </repository>
+    <repository>
+      <id>m2e</id>
+      <url>http://nexus.tesla.io:8081/nexus/content/sites/m2e.extras/m2e/1.4.0/N/LATEST/</url>
       <layout>p2</layout>
     </repository>
     <repository>
       <id>m2e-tycho</id>
-      <url>http://repository.tesla.io:8081/nexus/content/sites/m2e.extras/m2eclipse-tycho/0.6.0/N/0.6.0.201207041401/</url>
+      <url>http://nexus.tesla.io:8081/nexus/content/sites/m2e.extras/m2eclipse-tycho/0.7.0/N/0.7.0.201302171659/</url>
       <layout>p2</layout>
     </repository>
     <repository>
