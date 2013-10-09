@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.internal.runtime.DevClassPathHelper;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -39,7 +40,6 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
-import org.eclipse.osgi.internal.baseadaptor.DevClassPathHelper;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.osgi.framework.Bundle;
 
