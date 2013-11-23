@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension
+        point="org.eclipse.m2e.launching.mavenLaunchParticipants">
+     <mavenLaunchParticipant
+           class="com.ifedorenko.m2e.mavendev.internal.MavenLaunchParticipant"
+           id="com.ifedorenko.m2e.mavendev.mavenLaunchParticipant"
+           modes="run,debug"
+           name="Maven IT Launch Participant">
+     </mavenLaunchParticipant>
+  </extension>
+  <extension
+        point="org.eclipse.debug.core.launchConfigurationTypes">
+     <launchConfigurationType
+           delegate="com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchConfigurationDelegate"
+           id="com.ifedorenko.m2e.mavendev.itLaunchType"
+           modes="run,debug"
+           name="Maven IT"
+           public="true"
+           sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+           sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
+     </launchConfigurationType>
+  </extension>
+  <extension
+        point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+     <launchConfigurationTabGroup
+           class="com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchConfigurationTabGroup"
+           id="com.ifedorenko.m2e.mavendev.itLaunchTabGroup"
+           type="com.ifedorenko.m2e.mavendev.itLaunchType">
+     </launchConfigurationTabGroup>
+  </extension>
+   <extension point="org.eclipse.jdt.launching.classpathProviders">
+      <classpathProvider 
+          id="com.ifedorenko.m2e.mavendev.ITClasspathProvider"
+          class="com.ifedorenko.m2e.mavendev.internal.launching.MavenITClasspathProvider"/>
+      <classpathProvider 
+          id="com.ifedorenko.m2e.mavendev.ITSourcepathProvider"
+          class="com.ifedorenko.m2e.mavendev.internal.launching.MavenITSourcepathProvider"/>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            class="com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchShortcut"
+            id="com.ifedorenko.m2e.mavendev.itLaunchShortcut"
+            label="Maven IT"
+            modes="run, debug"
+            icon="icons/julaunch.gif">
+         <contextualLaunch>
+            <enablement>
+               <with variable="selection">
+                  <count value="1"/>
+               	  <iterate>
+                     <adapt type="org.eclipse.jdt.core.IJavaElement">
+		                <test property="org.eclipse.jdt.core.isInJavaProject"/>
+		                <test property="org.eclipse.jdt.core.hasTypeOnClasspath" value="org.apache.maven.it.Verifier"/>
+		                <test property="org.eclipse.jdt.junit.canLaunchAsJUnit" forcePluginActivation="true"/>
+		             </adapt>
+		          </iterate>
+               </with>
+            </enablement>
+         </contextualLaunch>
+         <configurationType
+               id="com.ifedorenko.m2e.mavendev.itLaunchType">
+         </configurationType>
+      </shortcut>
+   </extension>
+</plugin>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.ifedorenko.m2e.mavendev.feature"
+      label="Maven Development Tools"
+      version="0.2.0.qualifier"
+      provider-name="Igor Fedorenko">
+
+   <requires>
+      <import feature="org.eclipse.pde" version="3.8.0" match="compatible"/>
+      <import feature="org.sonatype.tycho.m2e.feature" version="0.6.0" match="compatible"/>
+      <import feature="com.ifedorenko.m2e.sourcelookup.feature" version="1.0.0" match="compatible"/>
+      <import feature="org.eclipse.jdt" version="3.8.0" match="compatible"/>
+   </requires>
+
+   <plugin
+         id="com.ifedorenko.m2e.mavendev"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.ifedorenko.m2e.mavendev.junit.runtime"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

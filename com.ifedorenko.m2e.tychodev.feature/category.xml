@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="com.ifedorenko.m2e.tychodev.feature_0.0.0.qualifier.jar" id="com.ifedorenko.m2e.tychodev.feature" version="0.0.0">
-      <category name="tychodev"/>
-   </feature>
-   <category-def name="tychodev" label="Tycho development support"/>
-</site>

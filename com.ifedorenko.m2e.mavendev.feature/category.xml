@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="com.ifedorenko.m2e.mavendev.feature_0.0.0.qualifier.jar" id="com.ifedorenko.m2e.mavendev.feature" version="0.0.0">
+      <category name="mavendev"/>
+   </feature>
+   <category-def name="mavendev" label="Maven Development Tools"/>
+</site>
