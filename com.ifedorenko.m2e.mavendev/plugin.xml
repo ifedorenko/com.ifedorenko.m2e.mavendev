@@ -4,7 +4,7 @@
   <extension
         point="org.eclipse.m2e.launching.mavenLaunchParticipants">
      <mavenLaunchParticipant
-           class="com.ifedorenko.m2e.mavendev.internal.MavenLaunchParticipant"
+           class="com.ifedorenko.m2e.mavendev.internal.tycho.TychoLaunchParticipant"
            id="com.ifedorenko.m2e.mavendev.mavenLaunchParticipant"
            modes="run,debug"
            name="Maven IT Launch Participant">
@@ -18,7 +18,7 @@
            modes="run,debug"
            name="Maven IT"
            public="true"
-           sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+           sourceLocatorId="org.eclipse.m2e.launching.MavenSourceLocator"
            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
      </launchConfigurationType>
   </extension>
@@ -32,7 +32,7 @@
   </extension>
    <extension point="org.eclipse.jdt.launching.classpathProviders">
       <classpathProvider 
-          id="com.ifedorenko.m2e.mavendev.ITClasspathProvider"
+          id="com.ifedorenko.m2e.mavendev.itClasspathProvider"
           class="com.ifedorenko.m2e.mavendev.internal.launching.MavenITClasspathProvider"/>
       <classpathProvider 
           id="com.ifedorenko.m2e.mavendev.ITSourcepathProvider"

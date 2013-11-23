@@ -10,8 +10,8 @@
  *******************************************************************************/
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
-import static com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchConfigurationDelegate.ATTR_TEST_TARGETPLATFORM;
-import static com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchConfigurationDelegate.getDefaultTestTargetPlatform;
+import static com.ifedorenko.m2e.mavendev.internal.tycho.TychoLaunchParticipant.ATTR_TEST_TARGETPLATFORM;
+import static com.ifedorenko.m2e.mavendev.internal.tycho.TychoLaunchParticipant.getDefaultTestTargetPlatform;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -58,11 +58,11 @@ public class MavenITLaunchConfigurationTab
                 entriesChanged();
             }
         } );
-
+        
         Label lblTestTargetPlatform = new Label( composite, SWT.NONE );
         lblTestTargetPlatform.setToolTipText( "Many Tycho ITs still require local Eclipse installation as test target platform" );
         lblTestTargetPlatform.setLayoutData( new GridData( SWT.RIGHT, SWT.CENTER, false, false, 1, 1 ) );
-        lblTestTargetPlatform.setText( "Test target platform" );
+        lblTestTargetPlatform.setText( "Tycho target platform" );
 
         combo = new Combo( composite, SWT.NONE );
         combo.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false, 1, 1 ) );
@@ -157,6 +157,6 @@ public class MavenITLaunchConfigurationTab
     @Override
     public String getName()
     {
-        return "Tycho IT";
+        return "Maven IT";
     }
 }

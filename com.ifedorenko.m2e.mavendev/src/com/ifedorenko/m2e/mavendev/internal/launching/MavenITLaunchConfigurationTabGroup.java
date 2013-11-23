@@ -10,6 +10,9 @@
  *******************************************************************************/
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -31,6 +34,8 @@ import org.eclipse.m2e.actions.MavenLaunchConstants;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.eclipse.m2e.internal.launch.MavenLaunchParticipantInfo;
+import org.eclipse.m2e.ui.internal.launch.MavenLaunchExtensionsTab;
 
 @SuppressWarnings( "restriction" )
 public class MavenITLaunchConfigurationTabGroup
@@ -40,16 +45,25 @@ public class MavenITLaunchConfigurationTabGroup
     @Override
     public void createTabs( ILaunchConfigurationDialog dialog, String mode )
     {
-        ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] { //
-            new JUnitLaunchConfigurationTab(), //
-                new JavaArgumentsTab(), //
-                new MavenITLaunchConfigurationTab(), //
-                new JavaClasspathTab(), //
-                new JavaJRETab(), //
-                new SourceLookupTab(), //
-                new EnvironmentTab(), //
-                new CommonTab() };
-        setTabs( tabs );
+        List<ILaunchConfigurationTab> tabs = new ArrayList<ILaunchConfigurationTab>();
+
+        tabs.add( new JUnitLaunchConfigurationTab() );
+        tabs.add( new MavenITLaunchConfigurationTab() );
+        tabs.add( new JavaArgumentsTab() );
+        tabs.add( new JavaClasspathTab() );
+        tabs.add( new JavaJRETab() );
+        tabs.add( new SourceLookupTab() );
+
+        List<MavenLaunchParticipantInfo> participants = MavenLaunchParticipantInfo.readParticipantsInfo();
+        if ( !participants.isEmpty() )
+        {
+            tabs.add( new MavenLaunchExtensionsTab( participants ) );
+        }
+
+        tabs.add( new EnvironmentTab() );
+        tabs.add( new CommonTab() );
+
+        setTabs( tabs.toArray( new ILaunchConfigurationTab[tabs.size()] ) );
     }
 
     @Override

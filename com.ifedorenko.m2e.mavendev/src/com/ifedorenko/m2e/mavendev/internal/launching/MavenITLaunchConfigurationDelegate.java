@@ -10,23 +10,22 @@
  *******************************************************************************/
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
+import static org.eclipse.m2e.internal.launch.MavenLaunchUtils.getParticipants;
+
 import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.internal.runtime.DevClassPathHelper;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
-import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 import org.eclipse.jdt.internal.junit.launcher.ITestKind;
 import org.eclipse.jdt.internal.junit.launcher.JUnitLaunchConfigurationConstants;
 import org.eclipse.jdt.internal.junit.launcher.JUnitRuntimeClasspathEntry;
@@ -34,20 +33,16 @@ import org.eclipse.jdt.junit.launcher.JUnitLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.MavenRuntime;
-import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourceLookupParticipant;
+import org.eclipse.m2e.internal.launch.IMavenLaunchParticipant;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
-import org.eclipse.osgi.service.datalocation.Location;
+import org.eclipse.m2e.internal.launch.MavenSourceLocator;
 import org.osgi.framework.Bundle;
 
-import com.ifedorenko.m2e.mavendev.internal.MavenLaunchParticipant;
-import com.ifedorenko.m2e.sourcelookup.internal.SourceLookupMavenLaunchParticipant;
-
 /**
- * Launches Tycho Integration Tests in development mode.
+ * Launches Maven Integration Tests in development mode.
  * <p/>
  * To enable debugging, test jvm will run both integration test code and maven runtime executed from the tests. The
  * latter is achieved by using Maven Verifier no-fork mode, which will execute Maven in a separate classloader.
@@ -61,15 +56,13 @@ public class MavenITLaunchConfigurationDelegate
     extends JUnitLaunchConfigurationDelegate
     implements ILaunchConfigurationDelegate
 {
-    public static final String ATTR_TEST_TARGETPLATFORM = "tychodev-testTargetPlatform";
-
     private ILaunch launch;
 
     private IProgressMonitor monitor;
 
     private MavenRuntimeLaunchSupport launchSupport;
 
-    private static final MavenLaunchParticipant launchParicipant = new MavenLaunchParticipant();
+    private List<IMavenLaunchParticipant> participants;
 
     @Override
     public synchronized void launch( ILaunchConfiguration configuration, String mode, ILaunch launch,
@@ -78,10 +71,11 @@ public class MavenITLaunchConfigurationDelegate
     {
         this.launch = launch;
         this.monitor = monitor;
+        this.participants = getParticipants( configuration, launch );
         this.launchSupport = MavenRuntimeLaunchSupport.create( configuration, launch, monitor );
         try
         {
-            launch.setSourceLocator( SourceLookupMavenLaunchParticipant.newSourceLocator( mode ) );
+            configureSourceLookup( configuration, launch, monitor );
 
             super.launch( configuration, mode, launch, monitor );
         }
@@ -89,6 +83,25 @@ public class MavenITLaunchConfigurationDelegate
         {
             this.launch = null;
             this.monitor = null;
+        }
+    }
+
+    // XXX copy&paste from MavenLaunchDelegate#configureSourceLookup
+    void configureSourceLookup( ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor )
+    {
+        if ( launch.getSourceLocator() instanceof MavenSourceLocator )
+        {
+            final MavenSourceLocator sourceLocator = (MavenSourceLocator) launch.getSourceLocator();
+            for ( IMavenLaunchParticipant participant : participants )
+            {
+                List<ISourceLookupParticipant> sourceLookupParticipants =
+                    participant.getSourceLookupParticipants( configuration, launch, monitor );
+                if ( sourceLookupParticipants != null && !sourceLookupParticipants.isEmpty() )
+                {
+                    sourceLocator.addParticipants( sourceLookupParticipants.toArray( new ISourceLookupParticipant[sourceLookupParticipants.size()] ) );
+                }
+            }
+            sourceLocator.addParticipants( new ISourceLookupParticipant[] { new JavaSourceLookupParticipant() } );
         }
     }
 
@@ -101,24 +114,15 @@ public class MavenITLaunchConfigurationDelegate
         // force Verifier to use embedded maven launcher, required by m2e workspace resolution
         arguments.appendProperty( "verifier.forkMode", "embedded" );
 
-        // TODO deprecate in Tycho and eventually remove
-        MavenRuntime runtime = MavenLaunchUtils.getMavenRuntime( configuration );
-        arguments.appendProperty( "tychodev-maven.home", runtime.getLocation() );
-        arguments.appendProperty( "tychodev-maven.ext.class.path", MavenLaunchUtils.getCliResolver( runtime ) );
-
         // actual test classpath, see RemoteTestRunner
-        arguments.appendProperty( "tychodev-cp", getTestClasspath( configuration ) );
+        arguments.appendProperty( "mavendev-cp", getTestClasspath( configuration ) );
 
-        String testTargetPlatform = configuration.getAttribute( ATTR_TEST_TARGETPLATFORM, (String) null );
-        if ( testTargetPlatform != null )
+        for ( IMavenLaunchParticipant participant : participants )
         {
-            arguments.appendProperty( "tychodev-testTargetPlatform", testTargetPlatform );
+            arguments.append( participant.getVMArguments( configuration, launch, monitor ) );
         }
 
-        arguments.append( SourceLookupMavenLaunchParticipant.getVMArguments() );
-        arguments.append( launchParicipant.getVMArguments( configuration, launch, monitor ) );
-
-        // last, so user can override standard arguments
+        // call super last, so the user can override standard arguments
         arguments.append( super.getVMArguments( configuration ) );
 
         return arguments.toString();
@@ -198,32 +202,6 @@ public class MavenITLaunchConfigurationDelegate
         }
     }
 
-    static String getDefaultTestTargetPlatform()
-    {
-        Location platformLocation = Platform.getInstallLocation();
-
-        if ( platformLocation == null )
-        {
-            return null;
-        }
-
-        URL url = platformLocation.getURL();
-
-        if ( "file".equals( url.getProtocol() ) )
-        {
-            try
-            {
-                return new File( url.toURI() ).getAbsolutePath();
-            }
-            catch ( URISyntaxException e )
-            {
-                // ignored
-            }
-        }
-
-        return null;
-    }
-
     @Override
     public IVMRunner getVMRunner( ILaunchConfiguration configuration, String mode )
         throws CoreException
@@ -231,20 +209,4 @@ public class MavenITLaunchConfigurationDelegate
         return launchSupport.decorateVMRunner( super.getVMRunner( configuration, mode ) );
     }
 
-    @Override
-    public File getDefaultWorkingDirectory( ILaunchConfiguration configuration )
-        throws CoreException
-    {
-        IJavaProject javaProject = JavaRuntime.getJavaProject( configuration );
-        IProject project = javaProject.getProject();
-        IMavenProjectFacade projectFacade = MavenPlugin.getMavenProjectRegistry().getProject( project );
-        if ( projectFacade != null )
-        {
-            return project.getFolder( projectFacade.getTestOutputLocation().removeFirstSegments( 1 ) ).getLocation().toFile();
-        }
-        else
-        {
-            return super.getWorkingDirectory( configuration );
-        }
-    }
 }

@@ -41,7 +41,7 @@ public class RemoteTestRunner
 
     protected ClassLoader getTestClassLoader()
     {
-        String cp = System.getProperty( "tychodev-cp" );
+        String cp = System.getProperty( "mavendev-cp" );
         if ( cp == null )
         {
             throw new IllegalArgumentException();

@@ -10,8 +10,8 @@
  *******************************************************************************/
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
-import static com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchConfigurationDelegate.ATTR_TEST_TARGETPLATFORM;
-import static com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchConfigurationDelegate.getDefaultTestTargetPlatform;
+import static com.ifedorenko.m2e.mavendev.internal.tycho.TychoLaunchParticipant.ATTR_TEST_TARGETPLATFORM;
+import static com.ifedorenko.m2e.mavendev.internal.tycho.TychoLaunchParticipant.getDefaultTestTargetPlatform;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;

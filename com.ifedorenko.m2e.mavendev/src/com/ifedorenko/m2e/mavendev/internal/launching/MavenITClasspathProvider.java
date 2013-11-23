@@ -19,7 +19,7 @@ import org.eclipse.m2e.jdt.internal.launch.MavenRuntimeClasspathProvider;
 public class MavenITClasspathProvider
     extends MavenRuntimeClasspathProvider
 {
-    public static final String MAVENIT_CLASSPATH_PROVIDER = "com.ifedorenko.m2e.mavendev.ITClasspathProvider";
+    public static final String MAVENIT_CLASSPATH_PROVIDER = "com.ifedorenko.m2e.mavendev.itClasspathProvider";
 
     @Override
     protected int getArtifactScope( ILaunchConfiguration configuration )
