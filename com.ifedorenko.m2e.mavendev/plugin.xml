@@ -35,7 +35,7 @@
           id="com.ifedorenko.m2e.mavendev.itClasspathProvider"
           class="com.ifedorenko.m2e.mavendev.internal.launching.MavenITClasspathProvider"/>
       <classpathProvider 
-          id="com.ifedorenko.m2e.mavendev.ITSourcepathProvider"
+          id="com.ifedorenko.m2e.mavendev.itSourcepathProvider"
           class="com.ifedorenko.m2e.mavendev.internal.launching.MavenITSourcepathProvider"/>
    </extension>
    <extension

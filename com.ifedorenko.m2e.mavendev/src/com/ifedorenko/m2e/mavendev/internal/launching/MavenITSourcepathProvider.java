@@ -19,7 +19,7 @@ import org.eclipse.m2e.jdt.internal.launch.MavenRuntimeClasspathProvider;
 public class MavenITSourcepathProvider
     extends MavenRuntimeClasspathProvider
 {
-    public static final String MAVENIT_SOURCEPATH_PROVIDER = "com.ifedorenko.m2e.mavendev.ITSourcepathProvider";
+    public static final String MAVENIT_SOURCEPATH_PROVIDER = "com.ifedorenko.m2e.mavendev.itSourcepathProvider";
 
     protected int getArtifactScope( ILaunchConfiguration configuration )
         throws CoreException
