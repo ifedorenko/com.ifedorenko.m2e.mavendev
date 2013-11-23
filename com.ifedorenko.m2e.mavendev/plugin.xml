@@ -13,7 +13,7 @@
   <extension
         point="org.eclipse.debug.core.launchConfigurationTypes">
      <launchConfigurationType
-           delegate="com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchConfigurationDelegate"
+           delegate="com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchDelegate"
            id="com.ifedorenko.m2e.mavendev.itLaunchType"
            modes="run,debug"
            name="Maven IT"

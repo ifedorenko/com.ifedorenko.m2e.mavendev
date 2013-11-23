@@ -10,7 +10,7 @@
  *******************************************************************************/
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
-import static org.eclipse.m2e.internal.launch.MavenLaunchUtils.getParticipants;
+import static org.eclipse.m2e.internal.launch.MavenLaunchUtils.quote;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
-import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 import org.eclipse.jdt.internal.junit.launcher.ITestKind;
 import org.eclipse.jdt.internal.junit.launcher.JUnitLaunchConfigurationConstants;
 import org.eclipse.jdt.internal.junit.launcher.JUnitRuntimeClasspathEntry;
@@ -33,12 +32,10 @@ import org.eclipse.jdt.junit.launcher.JUnitLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.sourcelookup.containers.JavaSourceLookupParticipant;
-import org.eclipse.m2e.internal.launch.IMavenLaunchParticipant;
+import org.eclipse.m2e.internal.launch.MavenLaunchExtensionsSupport;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
-import org.eclipse.m2e.internal.launch.MavenSourceLocator;
 import org.osgi.framework.Bundle;
 
 /**
@@ -52,7 +49,7 @@ import org.osgi.framework.Bundle;
  * classloader.
  */
 @SuppressWarnings( "restriction" )
-public class MavenITLaunchConfigurationDelegate
+public class MavenITLaunchDelegate
     extends JUnitLaunchConfigurationDelegate
     implements ILaunchConfigurationDelegate
 {
@@ -62,7 +59,7 @@ public class MavenITLaunchConfigurationDelegate
 
     private MavenRuntimeLaunchSupport launchSupport;
 
-    private List<IMavenLaunchParticipant> participants;
+    private MavenLaunchExtensionsSupport extensionsSupport;
 
     @Override
     public synchronized void launch( ILaunchConfiguration configuration, String mode, ILaunch launch,
@@ -71,11 +68,12 @@ public class MavenITLaunchConfigurationDelegate
     {
         this.launch = launch;
         this.monitor = monitor;
-        this.participants = getParticipants( configuration, launch );
-        this.launchSupport = MavenRuntimeLaunchSupport.create( configuration, launch, monitor );
         try
         {
-            configureSourceLookup( configuration, launch, monitor );
+            this.launchSupport = MavenRuntimeLaunchSupport.create( configuration, launch, monitor );
+            this.extensionsSupport = MavenLaunchExtensionsSupport.create( configuration, launch );
+
+            extensionsSupport.configureSourceLookup( configuration, launch, monitor );
 
             super.launch( configuration, mode, launch, monitor );
         }
@@ -83,25 +81,8 @@ public class MavenITLaunchConfigurationDelegate
         {
             this.launch = null;
             this.monitor = null;
-        }
-    }
-
-    // XXX copy&paste from MavenLaunchDelegate#configureSourceLookup
-    void configureSourceLookup( ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor )
-    {
-        if ( launch.getSourceLocator() instanceof MavenSourceLocator )
-        {
-            final MavenSourceLocator sourceLocator = (MavenSourceLocator) launch.getSourceLocator();
-            for ( IMavenLaunchParticipant participant : participants )
-            {
-                List<ISourceLookupParticipant> sourceLookupParticipants =
-                    participant.getSourceLookupParticipants( configuration, launch, monitor );
-                if ( sourceLookupParticipants != null && !sourceLookupParticipants.isEmpty() )
-                {
-                    sourceLocator.addParticipants( sourceLookupParticipants.toArray( new ISourceLookupParticipant[sourceLookupParticipants.size()] ) );
-                }
-            }
-            sourceLocator.addParticipants( new ISourceLookupParticipant[] { new JavaSourceLookupParticipant() } );
+            this.launchSupport = null;
+            this.extensionsSupport = null;
         }
     }
 
@@ -114,15 +95,16 @@ public class MavenITLaunchConfigurationDelegate
         // force Verifier to use embedded maven launcher, required by m2e workspace resolution
         arguments.appendProperty( "verifier.forkMode", "embedded" );
 
+        // maven bootclasspath, i.e. classworlds jar.
+        arguments.appendProperty( "maven.bootclasspath",
+                                  quote( MavenLaunchUtils.toPath( launchSupport.getBootClasspath() ) ) );
+
         // actual test classpath, see RemoteTestRunner
-        arguments.appendProperty( "mavendev-cp", getTestClasspath( configuration ) );
+        arguments.appendProperty( "mavendev.testclasspath", getTestClasspath( configuration ) );
 
-        for ( IMavenLaunchParticipant participant : participants )
-        {
-            arguments.append( participant.getVMArguments( configuration, launch, monitor ) );
-        }
+        extensionsSupport.appendVMArguments( arguments, configuration, launch, monitor );
 
-        // call super last, so the user can override standard arguments
+        // user configured entries
         arguments.append( super.getVMArguments( configuration ) );
 
         return arguments.toString();

@@ -41,7 +41,7 @@ public class RemoteTestRunner
 
     protected ClassLoader getTestClassLoader()
     {
-        String cp = System.getProperty( "mavendev-cp" );
+        String cp = System.getProperty( "mavendev.testclasspath" );
         if ( cp == null )
         {
             throw new IllegalArgumentException();
