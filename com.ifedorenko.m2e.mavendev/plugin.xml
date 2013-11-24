@@ -68,4 +68,12 @@
    <extension
          point="org.eclipse.m2e.core.lifecycleMappingMetadataSource">
    </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="com.ifedorenko.m2e.mavendev.itLaunchType"
+            icon="icons/julaunch.gif"
+            id="com.ifedorenko.m2e.mavendev.itLaunchTypeIcon">
+      </launchConfigurationTypeImage>
+   </extension>
 </plugin>
