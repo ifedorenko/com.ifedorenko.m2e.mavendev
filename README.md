@@ -57,8 +57,8 @@ installation!
   (configured on Main launch configuration dialog tab) and Maven IT (configured
   on Maven IT tab).
 * To make Debug/Run as Maven IT work for Maven Core integration tests
-** change maven-verifier version to 1.5-SNAPSHOT in core-it-suite/pom.xml
-** add -Dmaven.it.global-settings.dir=<path to core-it-suite/target/test-classes>
+ * change maven-verifier version to 1.5-SNAPSHOT in core-it-suite/pom.xml
+ * add -Dmaven.it.global-settings.dir=<path to core-it-suite/target/test-classes>
    to launch configuration VM arguments
 
 # Known problems and limitations
