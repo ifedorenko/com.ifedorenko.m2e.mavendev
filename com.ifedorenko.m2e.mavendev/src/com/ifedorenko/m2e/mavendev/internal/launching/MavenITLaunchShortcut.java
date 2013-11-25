@@ -10,12 +10,6 @@
  *******************************************************************************/
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
-import static com.ifedorenko.m2e.mavendev.internal.tycho.TychoLaunchParticipant.ATTR_TEST_TARGETPLATFORM;
-import static com.ifedorenko.m2e.mavendev.internal.tycho.TychoLaunchParticipant.getDefaultTestTargetPlatform;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.junit.launcher.JUnitLaunchShortcut;
 
 public class MavenITLaunchShortcut
@@ -24,16 +18,5 @@ public class MavenITLaunchShortcut
     protected String getLaunchConfigurationTypeId()
     {
         return "com.ifedorenko.m2e.mavendev.itLaunchType";
-    }
-
-    @Override
-    protected ILaunchConfigurationWorkingCopy createLaunchConfiguration( IJavaElement element )
-        throws CoreException
-    {
-        ILaunchConfigurationWorkingCopy configuration = super.createLaunchConfiguration( element );
-
-        configuration.setAttribute( ATTR_TEST_TARGETPLATFORM, getDefaultTestTargetPlatform() );
-
-        return configuration;
     }
 }

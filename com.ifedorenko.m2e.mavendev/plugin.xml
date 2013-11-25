@@ -2,15 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
   <extension
-        point="org.eclipse.m2e.launching.mavenLaunchParticipants">
-     <mavenLaunchParticipant
-           class="com.ifedorenko.m2e.mavendev.internal.tycho.TychoLaunchParticipant"
-           id="com.ifedorenko.m2e.mavendev.mavenLaunchParticipant"
-           modes="run,debug"
-           name="Maven IT Launch Participant">
-     </mavenLaunchParticipant>
-  </extension>
-  <extension
         point="org.eclipse.debug.core.launchConfigurationTypes">
      <launchConfigurationType
            delegate="com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchDelegate"

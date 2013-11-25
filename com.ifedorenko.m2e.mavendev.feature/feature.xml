@@ -6,8 +6,6 @@
       provider-name="Igor Fedorenko">
 
    <requires>
-      <import feature="org.eclipse.pde" version="3.8.0" match="compatible"/>
-      <import feature="org.sonatype.tycho.m2e.feature" version="0.6.0" match="compatible"/>
       <import feature="com.ifedorenko.m2e.sourcelookup.feature" version="1.0.0" match="compatible"/>
       <import feature="org.eclipse.jdt" version="3.8.0" match="compatible"/>
    </requires>

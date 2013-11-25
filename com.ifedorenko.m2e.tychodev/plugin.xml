@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.m2e.launching.mavenLaunchParticipants">
+     <mavenLaunchParticipant
+           class="com.ifedorenko.m2e.tychodev.internal.TychoLaunchParticipant"
+           id="com.ifedorenko.m2e.tychodev.mavenLaunchParticipant"
+           modes="run,debug"
+           name="Tycho Dev Launch Participant">
+     </mavenLaunchParticipant>
+   </extension>
+</plugin>

@@ -8,7 +8,7 @@
  * Contributors:
  *      Igor Fedorenko - initial API and implementation
  *******************************************************************************/
-package com.ifedorenko.m2e.mavendev.internal.tycho;
+package com.ifedorenko.m2e.tychodev.internal;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -48,8 +48,6 @@ import org.eclipse.pde.internal.core.PluginModelManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonatype.tycho.m2e.internal.M2ETychoActivator;
-
-import com.ifedorenko.m2e.mavendev.internal.LaunchUtils;
 
 /**
  * Maven launch participant that allows resolution of Tycho P2 runtime from Tycho/PDE workspace projects.

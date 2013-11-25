@@ -8,7 +8,7 @@
  * Contributors:
  *      Igor Fedorenko - initial API and implementation
  *******************************************************************************/
-package com.ifedorenko.m2e.mavendev.internal;
+package com.ifedorenko.m2e.tychodev.internal;
 
 import java.util.HashSet;
 import java.util.Set;
