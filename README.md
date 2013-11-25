@@ -45,7 +45,6 @@ installation!
   Project->Clean after change mojo annotations.  
 * Workspace dependency resolution is disabled for Run/Debug as Maven Build by
   default. Enable it in launch configuration dialog to plugin from workspace.
-  ![Maven launch configuration Main tab](https://github.com/ifedorenko/com.ifedorenko.m2e.tychodev/blob/master/EnableWorkspaceDependencyResolution.png)
 * Use Run/Debug as Maven IT launch configuration to run verifier-based
   integration tests from Eclipse workspace.
 
