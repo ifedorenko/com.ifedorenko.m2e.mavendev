@@ -33,8 +33,8 @@ installation!
 
 # Installation
 
-* github pages URL TDB
-* eclipse marketplace link TDB
+* Install "Maven Development Tools" feature from http://ifedorenko.github.com/m2e-extras/
+* eclipse marketplace TDB
 
 # Notes for Maven Plugin developers
 
