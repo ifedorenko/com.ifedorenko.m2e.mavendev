@@ -19,12 +19,17 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.internal.runtime.DevClassPathHelper;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.junit.launcher.ITestKind;
 import org.eclipse.jdt.internal.junit.launcher.JUnitLaunchConfigurationConstants;
 import org.eclipse.jdt.internal.junit.launcher.JUnitRuntimeClasspathEntry;
@@ -32,6 +37,8 @@ import org.eclipse.jdt.junit.launcher.JUnitLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.internal.launch.MavenLaunchExtensionsSupport;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport;
@@ -53,6 +60,8 @@ public class MavenITLaunchDelegate
     extends JUnitLaunchConfigurationDelegate
     implements ILaunchConfigurationDelegate
 {
+    public static final String ATTR_DETECT_CORE_ITS = "mavendev.detectCoreITs";
+
     private ILaunch launch;
 
     private IProgressMonitor monitor;
@@ -101,6 +110,21 @@ public class MavenITLaunchDelegate
 
         // actual test classpath, see RemoteTestRunner
         arguments.appendProperty( "mavendev.testclasspath", getTestClasspath( configuration ) );
+
+        if ( configuration.getAttribute( ATTR_DETECT_CORE_ITS, true ) )
+        {
+            IJavaProject jProject = JavaRuntime.getJavaProject( configuration );
+            IProject project = jProject.getProject();
+            IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().getProject( project );
+            if ( "org.apache.maven.its".equals( facade.getArtifactKey().getGroupId() )
+                && "core-it-suite".equals( facade.getArtifactKey().getArtifactId() ) )
+            {
+                // TODO need to introduce helpers to do this kind of stuff
+                final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+                IFolder output = root.getFolder( facade.getTestOutputLocation() );
+                arguments.appendProperty( "maven.it.global-settings.dir", output.getLocation().toOSString() );
+            }
+        }
 
         extensionsSupport.appendVMArguments( arguments, configuration, launch, monitor );
 
