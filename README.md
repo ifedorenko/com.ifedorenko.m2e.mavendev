@@ -56,10 +56,8 @@ installation!
 * "Maven Workspace" installation can be used to Debug/Run as Maven Build 
   (configured on Main launch configuration dialog tab) and Maven IT (configured
   on Maven IT tab).
-* To make Debug/Run as Maven IT work for Maven Core integration tests
- * change maven-verifier version to 1.5-SNAPSHOT in core-it-suite/pom.xml
- * add -Dmaven.it.global-settings.dir=<path to core-it-suite/target/test-classes>
-   to launch configuration VM arguments
+* Use Run/Debug as Maven IT launch configuration to run core-it-suite
+  integration tests from Eclipse workspace.
 
 # Known problems and limitations
 
