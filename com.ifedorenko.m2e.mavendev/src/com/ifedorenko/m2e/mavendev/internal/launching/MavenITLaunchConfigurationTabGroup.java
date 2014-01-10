@@ -82,7 +82,7 @@ public class MavenITLaunchConfigurationTabGroup
             return;
         }
 
-        if ( projectName == null )
+        if ( projectName == null || projectName.trim().isEmpty() )
         {
             return;
         }
