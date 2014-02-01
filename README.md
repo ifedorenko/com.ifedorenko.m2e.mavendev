@@ -34,7 +34,7 @@ installation!
 # Installation
 
 * Install "Maven Development Tools" feature from http://ifedorenko.github.com/m2e-extras/
-* eclipse marketplace TDB
+* eclipse marketplace http://marketplace.eclipse.org/content/maven-development-tools#.Uuw5MvaoDW2
 
 # Notes for Maven Plugin developers
 
