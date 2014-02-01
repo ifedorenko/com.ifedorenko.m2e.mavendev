@@ -34,7 +34,7 @@ installation!
 # Installation
 
 * Install "Maven Development Tools" feature from http://ifedorenko.github.com/m2e-extras/
-* eclipse marketplace http://marketplace.eclipse.org/content/maven-development-tools#.Uuw5MvaoDW2
+* Eclipse marketplace http://marketplace.eclipse.org/content/maven-development-tools
 
 # Notes for Maven Plugin developers
 
@@ -63,5 +63,3 @@ installation!
 
 * Only Verifier embedded mode is currently supported. Integration tests that
   require forked mode will either fail or breakpoints won't work.
-* Maven Plugin metadata, i.e., META-INF/maven/plugin.xml, is "disappears" in
-  some cases. A partial fix is planned in maven-plugin-plugin 3.3.
