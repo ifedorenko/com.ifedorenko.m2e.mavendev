@@ -26,7 +26,7 @@ majority of Maven Core integration tests directly from Eclipse workspace.
 * Maven 3.x runtime. m2e embedded, external and workspace runtimes are supported
 * Maven Plugins using maven-plugin-plugin version 2.3 or newer.
 * Debugging Maven Plugin integration tests requires maven-verifier version
-  1.5-SNAPSHOT or newer. 
+  1.5 or newer. 
 
 Do NOT use directories with spaces and other weird charactes for Eclipse 
 installation!
