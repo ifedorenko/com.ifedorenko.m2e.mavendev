@@ -1,19 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
+  <parent>
+    <groupId>io.tesla.tycho</groupId>
+    <artifactId>tycho-support</artifactId>
+    <version>0.0.10</version>
+  </parent>  
   <groupId>com.ifedorenko.m2e</groupId>
   <artifactId>com.ifedorenko.m2e.mavendev-parent</artifactId>
   <version>0.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
-    <tycho.version>0.19.0</tycho.version>
-    <tycho-extras.version>${tycho.version}</tycho-extras.version> 
     <repositoryPathId>mavendev</repositoryPathId>
-    <serverIdInSettingsXml>m2e.extras</serverIdInSettingsXml>
-    <repositoryUrl>http://repository.tesla.io:8081/nexus/service/local/repositories/m2e.extras/content-compressed/</repositoryUrl>
-    <repositoryPath>${repositoryPathId}/${unqualifiedVersion}/N/${unqualifiedVersion}.${buildQualifier}</repositoryPath>        
+    <p2MetadataName>Maven Development Tools</p2MetadataName>    
   </properties>
 
   <repositories>
@@ -24,12 +24,12 @@
     </repository>
     <repository>
       <id>m2e</id>
-      <url>http://nexus.tesla.io:8081/nexus/content/sites/m2e.extras/m2e/1.5.0/N/LATEST/</url>
+      <url>http://repository.takari.io:8081/nexus/content/sites/m2e.extras/m2e/1.5.0/N/LATEST/</url>
       <layout>p2</layout>
     </repository>
     <repository>
       <id>m2e-tycho</id>
-      <url>http://nexus.tesla.io:8081/nexus/content/sites/m2e.extras/m2eclipse-tycho/0.7.0/N/0.7.0.201302171659/</url>
+      <url>http://repository.takari.io:8081/nexus/content/sites/m2e.extras/m2eclipse-tycho/0.7.0/N/0.7.0.201302171659/</url>
       <layout>p2</layout>
     </repository>
     <repository>
@@ -46,25 +46,16 @@
   </modules>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-maven-plugin</artifactId>
-        <version>${tycho.version}</version>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
     <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.eclipse.tycho</groupId>
           <artifactId>tycho-packaging-plugin</artifactId>
-          <version>${tycho.version}</version>
           <dependencies>
             <dependency>
               <groupId>org.eclipse.tycho.extras</groupId>
               <artifactId>tycho-buildtimestamp-jgit</artifactId>
-              <version>${tycho-extras.version}</version>
+              <version>${tychoVersion}</version>
             </dependency>
           </dependencies>
           <configuration>
@@ -77,7 +68,7 @@
         <plugin>
           <groupId>org.eclipse.tycho</groupId>
           <artifactId>tycho-p2-plugin</artifactId>
-          <version>${tycho.version}</version>
+          <version>${tychoVersion}</version>
           <configuration>
             <baselineRepositories>
               <repository>
@@ -86,22 +77,7 @@
             </baselineRepositories>
           </configuration>
         </plugin>
-        <!--                                                                                                                                                                                                                 
-         |                                                                                                                                                                                                                   
-         | We only care about deploying the update site. Disable the deployment of the standard                                                                                                                              
-         | Maven resources and only deploy the update site in the feature build which is defined                                                                                                                             
-         | in the feature-build profile below.                                                                                                                                                                               
-         |                                                                                                                                                                                                                   
-         -->                                                                                                                                                                                                                 
-        <plugin>                                                                                                                                                                                                             
-          <groupId>org.apache.maven.plugins</groupId>                                                                                                                                                                        
-          <artifactId>maven-deploy-plugin</artifactId>                                                                                                                                                                       
-          <configuration>                                                                                                                                                                                                    
-            <skip>true</skip>                                                                                                                                                                                                
-          </configuration>                                                                                                                                                                                                   
-        </plugin>                          
       </plugins>
     </pluginManagement>    
   </build>
-
 </project>
