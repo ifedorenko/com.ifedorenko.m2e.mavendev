@@ -19,10 +19,9 @@ majority of Maven Core integration tests directly from Eclipse workspace.
 
 # Prerequisites
 
-* Eclipse Kepler or Luna, "standard" or "for java developers" distributions
+* Eclipse Luna or newer, "standard" or "for java developers" distributions
   are recommended.
-* m2e 1.5.0.20131123-2243 or newer, available from http://nexus.tesla.io:8081/nexus/content/sites/m2e.extras/m2e/1.5.0/N/LATEST/ 
-  p2 repository
+* m2e 1.5.0 or newer
 * Maven 3.x runtime. m2e embedded, external and workspace runtimes are supported
 * Maven Plugins using maven-plugin-plugin version 2.3 or newer.
 * Debugging Maven Plugin integration tests requires maven-verifier version
@@ -63,3 +62,4 @@ installation!
 
 * Only Verifier embedded mode is currently supported. Integration tests that
   require forked mode will either fail or breakpoints won't work.
+* Workspace dependency resolution is broken in Maven 3.2.1, use 3.2.2.
