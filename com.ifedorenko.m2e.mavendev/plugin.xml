@@ -44,8 +44,16 @@
                	  <iterate>
                      <adapt type="org.eclipse.jdt.core.IJavaElement">
 		                <test property="org.eclipse.jdt.core.isInJavaProject"/>
-		                <test property="org.eclipse.jdt.core.hasTypeOnClasspath" value="org.apache.maven.it.Verifier"/>
 		                <test property="org.eclipse.jdt.junit.canLaunchAsJUnit" forcePluginActivation="true"/>
+                  <or>
+                     <test
+                           property="org.eclipse.jdt.core.hasTypeOnClasspath"
+                           value="org.apache.maven.it.Verifier">
+                     </test>
+                     <test
+                           property="org.eclipse.jdt.core.hasTypeOnClasspath"
+                           value="io.takari.maven.testing.it.Verifier">
+                     </test></or>
 		             </adapt>
 		          </iterate>
                </with>
