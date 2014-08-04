@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.tesla.tycho</groupId>
     <artifactId>tycho-support</artifactId>
-    <version>0.0.10</version>
+    <version>0.0.13</version>
   </parent>  
   <groupId>com.ifedorenko.m2e</groupId>
   <artifactId>com.ifedorenko.m2e.mavendev-parent</artifactId>
