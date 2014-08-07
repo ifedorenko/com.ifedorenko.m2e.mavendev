@@ -38,6 +38,7 @@ import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.internal.launch.MavenLaunchExtensionsSupport;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
@@ -61,6 +62,8 @@ public class MavenITLaunchDelegate
     implements ILaunchConfigurationDelegate
 {
     public static final String ATTR_DETECT_CORE_ITS = "mavendev.detectCoreITs";
+
+    public static final String ATTR_OVERRIDE_MAVEN = "mavendev.overrideMaven";
 
     private ILaunch launch;
 
@@ -99,7 +102,18 @@ public class MavenITLaunchDelegate
     public String getVMArguments( ILaunchConfiguration configuration )
         throws CoreException
     {
-        VMArguments arguments = launchSupport.getVMArguments();
+        final VMArguments arguments;
+        if ( configuration.getAttribute( ATTR_OVERRIDE_MAVEN, true ) )
+        {
+            arguments = launchSupport.getVMArguments();
+        }
+        else
+        {
+            arguments = new VMArguments();
+            File state = MavenPluginActivator.getDefault().getMavenProjectManager().getWorkspaceStateFile();
+            // TODO replace with launchSupport.applyWorkspaceArtifacts(arguments) when require m2e 1.6
+            arguments.appendProperty( "m2e.workspace.state", quote( state.getAbsolutePath() ) );
+        }
 
         // force Verifier to use embedded maven launcher, required by m2e workspace resolution
         arguments.appendProperty( "verifier.forkMode", "embedded" );
