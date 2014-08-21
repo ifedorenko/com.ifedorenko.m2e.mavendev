@@ -36,7 +36,16 @@ public class RemoteTestRunner
         ClassLoader cl = getTestClassLoader();
         Class<?> c = cl.loadClass( "org.eclipse.jdt.internal.junit.runner.RemoteTestRunner" );
         Method m = c.getMethod( "main", String[].class );
-        m.invoke( null, (Object) args );
+        ClassLoader origTCCL = Thread.currentThread().getContextClassLoader();
+        Thread.currentThread().setContextClassLoader( cl );
+        try
+        {
+            m.invoke( null, (Object) args );
+        }
+        finally
+        {
+            Thread.currentThread().setContextClassLoader( origTCCL );
+        }
     }
 
     protected ClassLoader getTestClassLoader()
