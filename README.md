@@ -8,14 +8,14 @@ Maven repository.
 For Maven Plugin developers this provides ability to run and debug plugin 
 directly from Eclipse workspace. Changes to plugin sources, pom.xml 
 dependencies, etc, are picked up during next Run/Debug as Maven Build or 
-Maven IT launch. Breakpoints and sources lookup will automatically work in 
-plugin,  plugin dependencies and maven runtime code.
+Maven JUnit Test launch. Breakpoints and sources lookup will automatically
+work in plugin,  plugin dependencies and maven runtime code.
 
 For Maven Core developers this provides ability to run and debug maven 
 directly from eclipse workspace. Changes to maven core source, dependencies,
 etc, are picked up during next Run-As Maven Build or Maven IT launch. 
-Additionally, Run/Debug as Maven IT launch configuration can be used to run
-majority of Maven Core integration tests directly from Eclipse workspace.  
+Additionally, Run/Debug as 'Maven JUnit Test' launch configuration can be used
+to run majority of Maven Core integration tests directly from Eclipse workspace.  
 
 # Prerequisites
 
@@ -44,7 +44,7 @@ installation!
   Project->Clean after change mojo annotations.  
 * Workspace dependency resolution is disabled for Run/Debug as Maven Build by
   default. Enable it in launch configuration dialog to plugin from workspace.
-* Use Run/Debug as Maven IT launch configuration to run verifier-based
+* Use Run/Debug as 'Maven JUnit Test' launch configuration to run verifier-based
   integration tests from Eclipse workspace.
 
 # Notes for Maven Core developers
@@ -53,13 +53,13 @@ installation!
   Eclipse workspace. New "Maven Workspace" installation will become available 
   after the import.
 * "Maven Workspace" installation can be used to Debug/Run as Maven Build 
-  (configured on Main launch configuration dialog tab) and Maven IT (configured
-  on Maven IT tab).
-* Use Run/Debug as Maven IT launch configuration to run core-it-suite
+  (configured on Main launch configuration dialog tab) and 'Maven JUnit Test' 
+  (configured on Maven IT tab).
+* Use Run/Debug as 'Maven JUnit Test' launch configuration to run core-it-suite
   integration tests from Eclipse workspace.
 
 # Known problems and limitations
 
 * Only Verifier embedded mode is currently supported. Integration tests that
   require forked mode will either fail or breakpoints won't work.
-* Workspace dependency resolution is broken in Maven 3.2.1, use 3.2.2.
+* Workspace dependency resolution is broken in Maven 3.2.1, use 3.2.2 or newer

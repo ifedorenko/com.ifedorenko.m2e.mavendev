@@ -173,6 +173,6 @@ public class MavenITLaunchConfigurationTab
     @Override
     public String getName()
     {
-        return "Maven IT";
+        return "Maven";
     }
 }

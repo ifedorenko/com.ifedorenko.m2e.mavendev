@@ -7,7 +7,7 @@
            delegate="com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchDelegate"
            id="com.ifedorenko.m2e.mavendev.itLaunchType"
            modes="run,debug"
-           name="Maven IT"
+           name="Maven JUnit Test"
            public="true"
            sourceLocatorId="org.eclipse.m2e.launching.MavenSourceLocator"
            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
@@ -34,7 +34,7 @@
       <shortcut
             class="com.ifedorenko.m2e.mavendev.internal.launching.MavenITLaunchShortcut"
             id="com.ifedorenko.m2e.mavendev.itLaunchShortcut"
-            label="Maven IT"
+            label="Maven JUnit Test"
             modes="run, debug"
             icon="icons/julaunch.gif">
          <contextualLaunch>
