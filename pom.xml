@@ -24,7 +24,7 @@
     </repository>
     <repository>
       <id>m2e</id>
-      <url>http://repository.takari.io:8081/nexus/content/sites/m2e.extras/m2e/1.5.0/N/LATEST/</url>
+      <url>http://repository.takari.io:8081/nexus/content/sites/m2e.extras/m2e/1.6.0/N/LATEST/</url>
       <layout>p2</layout>
     </repository>
     <repository>

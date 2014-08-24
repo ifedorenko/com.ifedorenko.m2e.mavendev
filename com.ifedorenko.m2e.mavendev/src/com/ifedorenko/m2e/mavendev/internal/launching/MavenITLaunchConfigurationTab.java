@@ -10,17 +10,14 @@
  *******************************************************************************/
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
+import static com.ifedorenko.m2e.mavendev.internal.launching.Verifiers.isApacheVerifierProject;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.ArtifactRef;
-import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.ui.internal.launch.MavenRuntimeSelector;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -106,39 +103,10 @@ public class MavenITLaunchConfigurationTab
     @Override
     public void setDefaults( ILaunchConfigurationWorkingCopy configuration )
     {
-        if ( hasMavenDependency( configuration, "org.apache.maven.shared", "maven-verifier" ) )
+        if ( isApacheVerifierProject( configuration ) )
         {
             configuration.setAttribute( MavenITLaunchDelegate.ATTR_OVERRIDE_MAVEN, true );
         }
-    }
-
-    private static boolean hasMavenDependency( ILaunchConfiguration configuration, String groupId, String artifactId )
-    {
-        try
-        {
-            IJavaProject jproject = JavaRuntime.getJavaProject( configuration );
-            if ( jproject == null )
-            {
-                return false;
-            }
-            IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().getProject( jproject.getProject() );
-            if ( facade == null )
-            {
-                return false;
-            }
-            for ( ArtifactRef dependency : facade.getMavenProjectArtifacts() )
-            {
-                if ( groupId.equals( dependency.getGroupId() ) && artifactId.equals( dependency.getArtifactId() ) )
-                {
-                    return true;
-                }
-            }
-        }
-        catch ( CoreException e )
-        {
-            // maybe log
-        }
-        return false;
     }
 
     @Override
@@ -147,6 +115,11 @@ public class MavenITLaunchConfigurationTab
         runtimeSelector.initializeFrom( configuration );
         detectMavenCoreITs.setSelection( getAttribute( configuration, MavenITLaunchDelegate.ATTR_DETECT_CORE_ITS, true ) );
         overrideTestMaven.setSelection( getAttribute( configuration, MavenITLaunchDelegate.ATTR_OVERRIDE_MAVEN, false ) );
+        if ( isApacheVerifierProject( configuration ) )
+        {
+            overrideTestMaven.setEnabled( false );
+            runtimeSelector.setEnabled( true );
+        }
     }
 
     private static boolean getAttribute( ILaunchConfiguration configuration, String name, boolean defaultValue )

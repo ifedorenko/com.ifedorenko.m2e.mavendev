@@ -10,6 +10,8 @@
  *******************************************************************************/
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
+import static com.ifedorenko.m2e.mavendev.internal.launching.Verifiers.isTakariVerifierProject;
+import static com.ifedorenko.m2e.mavendev.internal.launching.m2e16.MavenRuntimeLaunchSupport.applyWorkspaceArtifacts;
 import static org.eclipse.m2e.internal.launch.MavenLaunchUtils.quote;
 
 import java.io.File;
@@ -38,13 +40,13 @@ import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.internal.launch.MavenLaunchExtensionsSupport;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
-import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
 import org.osgi.framework.Bundle;
+
+import com.ifedorenko.m2e.mavendev.internal.launching.m2e16.MavenRuntimeLaunchSupport;
 
 /**
  * Launches Maven Integration Tests in development mode.
@@ -82,7 +84,14 @@ public class MavenITLaunchDelegate
         this.monitor = monitor;
         try
         {
-            this.launchSupport = MavenRuntimeLaunchSupport.create( configuration, launch, monitor );
+            if ( configuration.getAttribute( ATTR_OVERRIDE_MAVEN, false ) )
+            {
+                this.launchSupport = MavenRuntimeLaunchSupport.builder( configuration ) //
+                .enableWorkspaceResolution( false ) // workspace resolution is enabled in #getVMArguments below
+                .enableWorkspaceResolver( !isTakariVerifierProject( configuration ) ) //
+                .build( monitor );
+            }
+
             this.extensionsSupport = MavenLaunchExtensionsSupport.create( configuration, launch );
 
             extensionsSupport.configureSourceLookup( configuration, launch, monitor );
@@ -103,24 +112,23 @@ public class MavenITLaunchDelegate
         throws CoreException
     {
         final VMArguments arguments;
-        if ( configuration.getAttribute( ATTR_OVERRIDE_MAVEN, false ) )
+        if ( launchSupport != null )
         {
             arguments = launchSupport.getVMArguments();
+
+            // maven bootclasspath, i.e. classworlds jar.
+            arguments.appendProperty( "maven.bootclasspath",
+                                      quote( MavenLaunchUtils.toPath( launchSupport.getBootClasspath() ) ) );
         }
         else
         {
             arguments = new VMArguments();
-            File state = MavenPluginActivator.getDefault().getMavenProjectManager().getWorkspaceStateFile();
-            // TODO replace with launchSupport.applyWorkspaceArtifacts(arguments) when require m2e 1.6
-            arguments.appendProperty( "m2e.workspace.state", quote( state.getAbsolutePath() ) );
         }
+
+        applyWorkspaceArtifacts( arguments );
 
         // force Verifier to use embedded maven launcher, required by m2e workspace resolution
         arguments.appendProperty( "verifier.forkMode", "embedded" );
-
-        // maven bootclasspath, i.e. classworlds jar.
-        arguments.appendProperty( "maven.bootclasspath",
-                                  quote( MavenLaunchUtils.toPath( launchSupport.getBootClasspath() ) ) );
 
         // actual test classpath, see RemoteTestRunner
         arguments.appendProperty( "mavendev.testclasspath", getTestClasspath( configuration ) );
@@ -226,7 +234,8 @@ public class MavenITLaunchDelegate
     public IVMRunner getVMRunner( ILaunchConfiguration configuration, String mode )
         throws CoreException
     {
-        return launchSupport.decorateVMRunner( super.getVMRunner( configuration, mode ) );
+        final IVMRunner runner = super.getVMRunner( configuration, mode );
+        return launchSupport != null ? launchSupport.decorateVMRunner( runner ) : runner;
     }
 
 }

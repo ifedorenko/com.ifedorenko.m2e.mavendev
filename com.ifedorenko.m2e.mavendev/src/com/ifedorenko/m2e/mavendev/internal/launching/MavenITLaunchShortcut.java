@@ -10,14 +10,13 @@
  *******************************************************************************/
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
-import static org.eclipse.m2e.actions.MavenLaunchConstants.ATTR_WORKSPACE_RESOLUTION;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.junit.launcher.JUnitLaunchShortcut;
 
-@SuppressWarnings( "restriction" )
+import static com.ifedorenko.m2e.mavendev.internal.launching.Verifiers.isApacheVerifierProject;
+
 public class MavenITLaunchShortcut
     extends JUnitLaunchShortcut
 {
@@ -31,7 +30,10 @@ public class MavenITLaunchShortcut
         throws CoreException
     {
         ILaunchConfigurationWorkingCopy configuration = super.createLaunchConfiguration( element );
-        configuration.setAttribute( ATTR_WORKSPACE_RESOLUTION, true );
+        if ( isApacheVerifierProject( configuration ) )
+        {
+            configuration.setAttribute( MavenITLaunchDelegate.ATTR_OVERRIDE_MAVEN, true );
+        }
         return configuration;
     }
 }
