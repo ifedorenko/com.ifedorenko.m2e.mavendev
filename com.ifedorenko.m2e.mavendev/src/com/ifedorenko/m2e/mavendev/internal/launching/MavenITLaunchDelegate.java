@@ -103,7 +103,7 @@ public class MavenITLaunchDelegate
         throws CoreException
     {
         final VMArguments arguments;
-        if ( configuration.getAttribute( ATTR_OVERRIDE_MAVEN, true ) )
+        if ( configuration.getAttribute( ATTR_OVERRIDE_MAVEN, false ) )
         {
             arguments = launchSupport.getVMArguments();
         }
