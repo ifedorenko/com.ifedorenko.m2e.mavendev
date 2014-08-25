@@ -11,8 +11,8 @@
 package com.ifedorenko.m2e.mavendev.internal.launching;
 
 import static com.ifedorenko.m2e.mavendev.internal.launching.Verifiers.isTakariVerifierProject;
-import static com.ifedorenko.m2e.mavendev.internal.launching.m2e16.MavenRuntimeLaunchSupport.applyWorkspaceArtifacts;
 import static org.eclipse.m2e.internal.launch.MavenLaunchUtils.quote;
+import static org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.applyWorkspaceArtifacts;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,10 +43,9 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.internal.launch.MavenLaunchExtensionsSupport;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
+import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
 import org.osgi.framework.Bundle;
-
-import com.ifedorenko.m2e.mavendev.internal.launching.m2e16.MavenRuntimeLaunchSupport;
 
 /**
  * Launches Maven Integration Tests in development mode.

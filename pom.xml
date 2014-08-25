@@ -8,7 +8,7 @@
   </parent>  
   <groupId>com.ifedorenko.m2e</groupId>
   <artifactId>com.ifedorenko.m2e.mavendev-parent</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <properties>
@@ -19,7 +19,7 @@
   <repositories>
     <repository>
       <id>eclipse</id>
-      <url>http://download.eclipse.org/releases/kepler</url>
+      <url>http://download.eclipse.org/releases/luna</url>
       <layout>p2</layout>
     </repository>
     <repository>

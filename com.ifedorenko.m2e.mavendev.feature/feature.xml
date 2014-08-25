@@ -2,7 +2,7 @@
 <feature
       id="com.ifedorenko.m2e.mavendev.feature"
       label="Maven Development Tools"
-      version="0.2.0.qualifier"
+      version="0.3.0.qualifier"
       provider-name="Igor Fedorenko">
 
    <description>
