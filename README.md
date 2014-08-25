@@ -21,7 +21,7 @@ to run majority of Maven Core integration tests directly from Eclipse workspace.
 
 * Eclipse Luna or newer, "standard" or "for java developers" distributions
   are recommended.
-* m2e 1.5.0 or newer
+* m2e 1.6.0 or newer
 * Maven 3.x runtime. m2e embedded, external and workspace runtimes are supported
 * Maven Plugins using maven-plugin-plugin version 2.3 or newer.
 * Debugging Maven Plugin integration tests requires maven-verifier version
