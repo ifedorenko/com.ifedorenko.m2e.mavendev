@@ -120,6 +120,10 @@ public class MavenITLaunchConfigurationTab
             overrideTestMaven.setEnabled( false );
             runtimeSelector.setEnabled( true );
         }
+        else
+        {
+            runtimeSelector.setEnabled( overrideTestMaven.getSelection() );
+        }
     }
 
     private static boolean getAttribute( ILaunchConfiguration configuration, String name, boolean defaultValue )
