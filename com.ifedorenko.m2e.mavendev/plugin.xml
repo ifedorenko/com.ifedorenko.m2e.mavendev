@@ -52,7 +52,7 @@
                      </test>
                      <test
                            property="org.eclipse.jdt.core.hasTypeOnClasspath"
-                           value="io.takari.maven.testing.it.Verifier">
+                           value="io.takari.maven.testing.executor.MavenExecution">
                      </test></or>
 		             </adapt>
 		          </iterate>
