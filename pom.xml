@@ -2,9 +2,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>io.tesla.tycho</groupId>
+    <groupId>io.takari.tycho</groupId>
     <artifactId>tycho-support</artifactId>
-    <version>0.0.13</version>
+    <version>0.14.0</version>
   </parent>  
   <groupId>com.ifedorenko.m2e</groupId>
   <artifactId>com.ifedorenko.m2e.mavendev-parent</artifactId>
@@ -13,29 +13,13 @@
 
   <properties>
     <repositoryPathId>mavendev</repositoryPathId>
-    <p2MetadataName>Maven Development Tools</p2MetadataName>    
   </properties>
 
   <repositories>
     <repository>
-      <id>eclipse</id>
-      <url>http://download.eclipse.org/releases/luna</url>
+      <id>sourcelookup</id>
       <layout>p2</layout>
-    </repository>
-    <repository>
-      <id>m2e</id>
-      <url>http://repository.takari.io:8081/nexus/content/sites/m2e.extras/m2e/1.6.0/N/LATEST/</url>
-      <layout>p2</layout>
-    </repository>
-    <repository>
-      <id>m2e-tycho</id>
-      <url>http://repository.takari.io:8081/nexus/content/sites/m2e.extras/m2eclipse-tycho/0.7.0/N/0.7.0.201302171659/</url>
-      <layout>p2</layout>
-    </repository>
-    <repository>
-      <id>ifedorenk-m2e-extras</id>
-      <url>http://ifedorenko.github.com/m2e-extras</url>
-      <layout>p2</layout>
+      <url>http://repository.takari.io:8081/nexus/content/sites/m2e.extras/sourcelookup/1.1.0/N/LATEST</url>
     </repository>
   </repositories>
 
@@ -43,6 +27,7 @@
     <module>com.ifedorenko.m2e.mavendev</module>
     <module>com.ifedorenko.m2e.mavendev.junit.runtime</module>
     <module>com.ifedorenko.m2e.mavendev.feature</module>
+    <module>com.ifedorenko.m2e.mavendev.repository</module>
   </modules>
 
   <build>
@@ -63,18 +48,6 @@
             <jgit.ignore>
               pom.xml
             </jgit.ignore>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.eclipse.tycho</groupId>
-          <artifactId>tycho-p2-plugin</artifactId>
-          <version>${tychoVersion}</version>
-          <configuration>
-            <baselineRepositories>
-              <repository>
-                <url>http://ifedorenko.github.com/m2e-extras/</url>
-              </repository>
-            </baselineRepositories>
           </configuration>
         </plugin>
       </plugins>
