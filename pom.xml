@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.takari.tycho</groupId>
     <artifactId>tycho-support</artifactId>
-    <version>0.14.0</version>
+    <version>0.15.0</version>
   </parent>  
   <groupId>com.ifedorenko.m2e</groupId>
   <artifactId>com.ifedorenko.m2e.mavendev-parent</artifactId>
@@ -19,7 +19,7 @@
     <repository>
       <id>sourcelookup</id>
       <layout>p2</layout>
-      <url>http://repository.takari.io:8081/nexus/content/sites/m2e.extras/sourcelookup/1.1.0/N/LATEST</url>
+      <url>https://repository.takari.io/content/sites/m2e.extras/sourcelookup/1.1.0/N/LATEST</url>
     </repository>
   </repositories>
 
