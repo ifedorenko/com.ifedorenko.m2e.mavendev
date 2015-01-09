@@ -45,6 +45,8 @@ import org.eclipse.m2e.internal.launch.MavenLaunchExtensionsSupport;
 import org.eclipse.m2e.internal.launch.MavenLaunchUtils;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport;
 import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
+import org.eclipse.m2e.jdt.IClasspathManager;
+import org.eclipse.m2e.jdt.internal.launch.MavenRuntimeClasspathProvider;
 import org.osgi.framework.Bundle;
 
 /**
@@ -193,8 +195,20 @@ public class MavenITLaunchDelegate
     public String getTestClasspath( ILaunchConfiguration configuration )
         throws CoreException
     {
-        IRuntimeClasspathEntry[] entries = JavaRuntime.computeUnresolvedRuntimeClasspath( configuration );
-        entries = JavaRuntime.resolveRuntimeClasspath( entries, configuration );
+        MavenRuntimeClasspathProvider resolver = new MavenRuntimeClasspathProvider()
+        {
+            @Override
+            protected int getArtifactScope( ILaunchConfiguration configuration )
+                throws CoreException
+            {
+                return IClasspathManager.CLASSPATH_TEST;
+            }
+        };
+        IRuntimeClasspathEntry[] entries = resolver.computeUnresolvedClasspath( configuration );
+        entries = resolver.resolveClasspath( entries, configuration );
+
+        // IRuntimeClasspathEntry[] entries = JavaRuntime.computeUnresolvedRuntimeClasspath( configuration );
+        // entries = JavaRuntime.resolveRuntimeClasspath( entries, configuration );
         StringBuilder cp = new StringBuilder();
         Set<String> set = new HashSet<String>( entries.length );
         for ( IRuntimeClasspathEntry cpe : entries )
