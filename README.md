@@ -57,9 +57,14 @@ installation!
   (configured on Maven IT tab).
 * Use Run/Debug as 'Maven JUnit Test' launch configuration to run core-it-suite
   integration tests from Eclipse workspace.
-
+  
 # Known problems and limitations
 
 * Only Verifier embedded mode is currently supported. Integration tests that
   require forked mode will either fail or breakpoints won't work.
 * Workspace dependency resolution is broken in Maven 3.2.1, use 3.2.2 or newer
+
+# License
+
+The code is licensed under Eclipse Public License 1.0, you can download a copy 
+from http://www.eclipse.org/legal/epl-v10.html.
