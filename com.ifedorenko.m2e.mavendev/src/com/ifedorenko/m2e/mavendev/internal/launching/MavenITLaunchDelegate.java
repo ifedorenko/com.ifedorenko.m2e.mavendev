@@ -15,6 +15,8 @@ import static org.eclipse.m2e.internal.launch.MavenLaunchUtils.quote;
 import static org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.applyWorkspaceArtifacts;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,8 +28,11 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
@@ -48,6 +53,8 @@ import org.eclipse.m2e.internal.launch.MavenRuntimeLaunchSupport.VMArguments;
 import org.eclipse.m2e.jdt.IClasspathManager;
 import org.eclipse.m2e.jdt.internal.launch.MavenRuntimeClasspathProvider;
 import org.osgi.framework.Bundle;
+
+import com.ifedorenko.m2e.mavendev.internal.MavenDevToolsActivator;
 
 /**
  * Launches Maven Integration Tests in development mode.
@@ -181,17 +188,31 @@ public class MavenITLaunchDelegate
             bundleRelativePath = "/";
         }
         Bundle bundle = Platform.getBundle( bundleId );
-        cp.add( MavenLaunchUtils.getBundleEntry( bundle, bundleRelativePath ) );
+        cp.add( getBundleEntry( bundle, bundleRelativePath ) );
         if ( DevClassPathHelper.inDevelopmentMode() )
         {
             for ( String cpe : DevClassPathHelper.getDevClassPath( bundleId ) )
             {
-                cp.add( MavenLaunchUtils.getBundleEntry( bundle, cpe ) );
+                cp.add( getBundleEntry( bundle, cpe ) );
             }
         }
         return cp;
     }
 
+    private String getBundleEntry( Bundle bundle, String path )
+        throws CoreException
+    {
+        URL entry = bundle.getEntry( path );
+        try
+        {
+            return FileLocator.toFileURL( entry ).getFile();
+        }
+        catch ( IOException e )
+        {
+            throw new CoreException( new Status( IStatus.ERROR, MavenDevToolsActivator.PLUGIN_ID, e.getMessage(), e ) );
+        }
+    }
+    
     public String getTestClasspath( ILaunchConfiguration configuration )
         throws CoreException
     {
