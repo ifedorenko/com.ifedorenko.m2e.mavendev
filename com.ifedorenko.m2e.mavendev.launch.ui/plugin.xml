@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.m2e.launching.mavenLaunchParticipants">
+      <mavenLaunchParticipant
+            class="com.ifedorenko.m2e.mavendev.launch.ui.internal.M2ELaunchParticipant"
+            id="com.ifedorenko.m2e.mavendev.launch.ui.mavenLaunchParticipant"
+            modes="run,debug"
+            name="Maven Build Progress View Support">
+      </mavenLaunchParticipant>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="com.ifedorenko.m2e.mavendev.launch.ui"
+            name="Sample Category">
+      </category>
+      <view
+            category="com.ifedorenko.m2e.mavendev.launch.ui"
+            class="com.ifedorenko.m2e.mavendev.launch.ui.internal.views.BuildProgressView"
+            icon="icons/sample.gif"
+            id="com.ifedorenko.m2e.mavendev.launch.ui.views.SampleView"
+            name="Maven Build">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="com.ifedorenko.m2e.mavendev.launch.ui.views.SampleView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+
+</plugin>
