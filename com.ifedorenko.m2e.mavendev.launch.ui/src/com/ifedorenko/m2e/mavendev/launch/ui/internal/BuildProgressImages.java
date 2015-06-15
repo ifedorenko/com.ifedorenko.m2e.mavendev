@@ -15,7 +15,26 @@ public class BuildProgressImages {
 
     Image get();
 
+    ImageDescriptor getDescriptor();
+
   }
+
+  public static final ILazyImage PROJECT = create("pom.gif");
+
+  public static final ILazyImage PROJECT_INPROGRESS =
+      createDecorated("pom.gif", "inprogress_ovr.png");
+
+  public static final ILazyImage PROJECT_SUCCESS = createDecorated("pom.gif", "success_ovr.gif");
+
+  public static final ILazyImage PROJECT_FAILURE = createDecorated("pom.gif", "failure_ovr.png");
+
+  public static final ILazyImage PROJECT_SKIPPED = createDecorated("pom.gif", "skipped_ovr.png");
+
+  public static final ILazyImage FAILURE = create("failure.gif");
+
+  //
+  // boring implementation follows
+  //
 
   private static class SimpleImage implements ILazyImage {
     private final String filename;
@@ -24,10 +43,12 @@ public class BuildProgressImages {
       this.filename = filename;
     }
 
+    @Override
     public Image get() {
       return getImageRegistry().get(filename);
     }
 
+    @Override
     public ImageDescriptor getDescriptor() {
       return getImageRegistry().getDescriptor(filename);
     }
@@ -52,18 +73,11 @@ public class BuildProgressImages {
       return UIPLUGIN.getResourceManager().createImage(descriptor);
     }
 
+    @Override
+    public ImageDescriptor getDescriptor() {
+      throw new UnsupportedOperationException();
+    }
   }
-
-  public static final ILazyImage PROJECT = create("pom.gif");
-
-  public static final ILazyImage PROJECT_INPROGRESS =
-      createDecorated("pom.gif", "inprogress_ovr.png");
-
-  public static final ILazyImage PROJECT_SUCCESS = createDecorated("pom.gif", "success_ovr.gif");
-
-  public static final ILazyImage PROJECT_FAILURE = createDecorated("pom.gif", "failure_ovr.png");
-
-  public static final ILazyImage PROJECT_SKIPPED = createDecorated("pom.gif", "skipped_ovr.png");
 
   private static SimpleImage create(String filename) {
     ImageRegistry registry = getImageRegistry();

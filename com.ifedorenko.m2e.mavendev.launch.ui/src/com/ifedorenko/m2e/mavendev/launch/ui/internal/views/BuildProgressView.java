@@ -7,14 +7,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -46,6 +47,8 @@ public class BuildProgressView extends ViewPart {
 
   private UIJob refreshJob;
 
+  private GreenRedProgressBar progressBar;
+
   private final IBuildProgressListener buildListener = new IBuildProgressListener() {
     @Override
     public void onUpdate(Object source) {
@@ -56,7 +59,31 @@ public class BuildProgressView extends ViewPart {
     }
   };
 
-  private GreenRedProgressBar progressBar;
+  private final ViewerFilter failureFilter = new ViewerFilter() {
+    @Override
+    public boolean select(Viewer viewer, Object parentElement, Object element) {
+      if (element instanceof Project && actionFailuresOnly.isChecked()) {
+        return ((Project) element)
+            .getStatus() == com.ifedorenko.m2e.mavendev.launch.ui.internal.model.Status.failed;
+      }
+      return true;
+    }
+  };
+
+  private final Action actionFailuresOnly = new Action("Show failures only", IAction.AS_CHECK_BOX) {
+    {
+      setImageDescriptor(BuildProgressImages.FAILURE.getDescriptor());
+    }
+
+    @Override
+    public void run() {
+      if (isChecked()) {
+        viewer.addFilter(failureFilter);
+      } else {
+        viewer.removeFilter(failureFilter);
+      }
+    }
+  };
 
   public BuildProgressView() {
     CORE.addListener(buildListener);
@@ -151,19 +178,14 @@ public class BuildProgressView extends ViewPart {
         return null;
       }
     });
-    // viewer.setInput(getViewSite());
-    // getSite().setSelectionProvider(viewer);
 
     IActionBars actionBars = getViewSite().getActionBars();
     IToolBarManager toolBar = actionBars.getToolBarManager();
     IMenuManager viewMenu = actionBars.getMenuManager();
 
-    Action action = new Action("Test") {};
-    toolBar.add(action);
+    toolBar.add(actionFailuresOnly);
 
-    toolBar.add(new Separator());
     actionBars.updateActionBars();
-
   }
 
   public void setFocus() {
@@ -207,7 +229,13 @@ public class BuildProgressView extends ViewPart {
           progressBar.reset(status.hasFailures(), false /* stopped */,
               status.getCompleted() /* tickDone */, status.getTotal() /* maximum */);
         } else if (object instanceof Project) {
-          viewer.refresh(object, true);
+          if (isProjectShown(object)) {
+            // workaround apparent TreeViewer bug
+            // filtered nodes are not revealed when filter state changes
+            viewer.refresh();
+          } else {
+            viewer.refresh(object, true);
+          }
 
           Launch launch = (Launch) viewer.getInput();
           BuildStatus status = launch.getStatus();
@@ -219,5 +247,9 @@ public class BuildProgressView extends ViewPart {
       viewer.getTree().setRedraw(true);
     }
     return Status.OK_STATUS;
+  }
+
+  protected boolean isProjectShown(Object object) {
+    return failureFilter.select(null, null, object);
   }
 }
