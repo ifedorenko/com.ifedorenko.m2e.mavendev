@@ -21,6 +21,11 @@
       <layout>p2</layout>
       <url>https://repository.takari.io/content/sites/m2e.extras/sourcelookup/1.1.0/N/LATEST</url>
     </repository>
+    <repository>
+      <id>takaristats</id>
+      <layout>p2</layout>
+      <url>https://repository.takari.io/content/sites/m2e.extras/takari-stats-m2e/0.1.0/N/LATEST</url>
+    </repository>
   </repositories>
 
   <modules>
