@@ -9,8 +9,13 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 public class Launch {
+  private final String id;
 
   private Map<String, Project> projects = Collections.emptyMap();
+
+  public Launch(String launchId) {
+    id = launchId;
+  }
 
   public Collection<Project> getProjects() {
     return projects.values();
@@ -49,5 +54,9 @@ public class Launch {
       }
     }
     return new BuildStatus(projects.size(), succeded, failed, skipped);
+  }
+
+  public String getId() {
+    return id;
   }
 }

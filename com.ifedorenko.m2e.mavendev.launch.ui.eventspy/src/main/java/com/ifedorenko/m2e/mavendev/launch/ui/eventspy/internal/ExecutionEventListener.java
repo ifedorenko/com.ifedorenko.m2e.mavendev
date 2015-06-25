@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -24,13 +25,16 @@ import com.google.gson.Gson;
 
 @Named
 @Singleton
-public class ExecutionEventListener implements EventSpy {
+public class ExecutionEventListener implements EventSpy, MessageSink {
 
   public static final String KEY_PORT = "m2e.buildListener.port";
   public static final String KEY_LAUNCHID = "m2e.buildListener.launchId";
 
   private static final Gson GSON = new Gson();
   private static final Charset UTF_8 = Charset.forName("UTF-8");
+
+  @Inject
+  private List<MessagePumpFactory> messagePumps;
 
   private String launchId;
 
@@ -60,6 +64,12 @@ public class ExecutionEventListener implements EventSpy {
       launchId = null;
       socket = null; // TODO close
       output = null; // redundant
+    }
+
+    if (launchId != null) {
+      for (MessagePumpFactory factory : messagePumps) {
+        factory.createPump(this);
+      }
     }
   }
 
@@ -103,7 +113,6 @@ public class ExecutionEventListener implements EventSpy {
 
   private void reportProjectCompleted(MavenProject project, Type type) throws IOException {
     Map<String, Object> data = new HashMap<>();
-    data.put("launchId", launchId);
     data.put("messageId", "projectCompleted");
     data.put("projectId", projectGA(project));
     data.put("projectStatus", type.name());
@@ -113,7 +122,6 @@ public class ExecutionEventListener implements EventSpy {
 
   private void reportProjectStarted(MavenProject project, Type type) throws IOException {
     Map<String, Object> data = new HashMap<>();
-    data.put("launchId", launchId);
     data.put("messageId", "projectStarted");
     data.put("projectId", projectGA(project));
 
@@ -125,7 +133,6 @@ public class ExecutionEventListener implements EventSpy {
     MavenProject project = session.getCurrentProject();
 
     Map<String, Object> data = new HashMap<>();
-    data.put("launchId", launchId);
     data.put("messageId", "mojoStarted");
     data.put("projectId", projectGA(project));
     data.put("executionId", execution.getExecutionId());
@@ -143,7 +150,6 @@ public class ExecutionEventListener implements EventSpy {
     }
 
     Map<String, Object> data = new HashMap<>();
-    data.put("launchId", launchId);
     data.put("messageId", "sessionStarted");
     data.put("projects", projects);
 
@@ -156,13 +162,14 @@ public class ExecutionEventListener implements EventSpy {
 
   private void reportSessionEnd(MavenSession session) throws IOException {
     Map<String, Object> data = new HashMap<>();
-    data.put("launchId", launchId);
     data.put("messageId", "sessionEnded");
 
     sendMessage(data);
   }
 
-  protected void sendMessage(Map<String, Object> data) throws IOException {
+  @Override
+  public void sendMessage(Map<String, Object> data) throws IOException {
+    data.put("launchId", launchId);
     String message = GSON.toJson(data);
     message += "\n"; // apparently required to flush data to the socket
     output.write(message.getBytes(UTF_8));
@@ -173,11 +180,13 @@ public class ExecutionEventListener implements EventSpy {
   public void close() {
     try {
       output.close();
-    } catch (IOException e) {}
+    } catch (IOException e) {
+    }
     output = null;
     try {
       socket.close();
-    } catch (IOException e) {}
+    } catch (IOException e) {
+    }
     socket = null;
     launchId = null;
   }

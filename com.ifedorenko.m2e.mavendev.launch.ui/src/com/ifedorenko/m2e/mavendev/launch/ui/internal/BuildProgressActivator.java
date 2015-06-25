@@ -3,6 +3,7 @@ package com.ifedorenko.m2e.mavendev.launch.ui.internal;
 import static org.eclipse.m2e.core.internal.Bundles.findDependencyBundle;
 import static org.eclipse.m2e.core.internal.Bundles.getClasspathEntries;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -44,6 +45,8 @@ public class BuildProgressActivator extends AbstractUIPlugin {
 
   private final List<IBuildProgressListener> listeners = new CopyOnWriteArrayList<>();
 
+  private BuildLogWriter logWriter;
+
   private final IDebugEventSetListener debugListener = new IDebugEventSetListener() {
     @Override
     public void handleDebugEvents(DebugEvent[] events) {}
@@ -62,6 +65,7 @@ public class BuildProgressActivator extends AbstractUIPlugin {
         if (launch != null) {
           // TODO notify listeners
         }
+        logWriter.removeLaunch(launchId);
       }
     }
 
@@ -92,6 +96,9 @@ public class BuildProgressActivator extends AbstractUIPlugin {
         case "projectCompleted":
           onProjectCompleted(data);
           break;
+        case "logEvent":
+          onLogEvent(data);
+          break;
       }
     }
 
@@ -104,12 +111,24 @@ public class BuildProgressActivator extends AbstractUIPlugin {
     DebugPlugin.getDefault().addDebugEventListener(debugListener);
     DebugPlugin.getDefault().getLaunchManager().addLaunchListener(launchesListener);
 
+    logWriter = new BuildLogWriter(getStateLocation().append("logs").toFile());
     buildListener.start();
   }
 
+  protected void onLogEvent(Map<String, Object> data) {
+    String launchId = (String) data.get("launchId");
+    String projectId = (String) data.get("projectId");
+    String message = (String) data.get("message");
+
+    logWriter.write(launchId, projectId, message);
+  }
+
   protected void onProjectCompleted(Map<String, Object> data) {
-    Launch launch = launches.get((String) data.get("launchId"));
-    Project project = launch.getProject((String) data.get("projectId"));
+    String launchId = (String) data.get("launchId");
+    String projectId = (String) data.get("projectId");
+
+    Launch launch = launches.get(launchId);
+    Project project = launch.getProject(projectId);
 
     Status status;
     switch ((String) data.get("projectStatus")) {
@@ -130,6 +149,8 @@ public class BuildProgressActivator extends AbstractUIPlugin {
     project.setStatus(status);
 
     notifyListeners(project);
+
+    logWriter.projectCompleted(launchId, projectId);
   }
 
   protected void onProjectStarted(Map<String, Object> data) {
@@ -168,6 +189,7 @@ public class BuildProgressActivator extends AbstractUIPlugin {
   @Override
   public void stop(BundleContext context) throws Exception {
     buildListener.stop();
+    logWriter.stop();
 
     DebugPlugin.getDefault().getLaunchManager().removeLaunchListener(launchesListener);
     DebugPlugin.getDefault().removeDebugEventListener(debugListener);
@@ -190,7 +212,7 @@ public class BuildProgressActivator extends AbstractUIPlugin {
   public String registerLaunch(ILaunch launch) {
     String launchId = UUID.randomUUID().toString();
     launch.setAttribute(KEY_LAUNCHID, launchId);
-    launches.put(launchId, new Launch());
+    launches.put(launchId, new Launch(launchId));
     return launchId;
   }
 
@@ -225,5 +247,9 @@ public class BuildProgressActivator extends AbstractUIPlugin {
       entries.addAll(getClasspathEntries(dependencyBundle));
     }
     return new ArrayList<>(entries);
+  }
+
+  public File getLogFile(String launchId, String projectId) {
+    return logWriter.getProjectFile(launchId, projectId);
   }
 }

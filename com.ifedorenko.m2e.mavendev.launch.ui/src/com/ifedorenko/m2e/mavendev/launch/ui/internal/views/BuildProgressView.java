@@ -1,8 +1,11 @@
 package com.ifedorenko.m2e.mavendev.launch.ui.internal.views;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -12,18 +15,27 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
@@ -98,6 +110,26 @@ public class BuildProgressView extends ViewPart {
     viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
     Tree tree = viewer.getTree();
     tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+    final Menu menu = new Menu(tree);
+    tree.setMenu(menu);
+
+    final MenuItem mntmOpenBuildLog = new MenuItem(menu, SWT.NONE);
+    mntmOpenBuildLog.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        openLogViewer();
+      }
+    });
+    mntmOpenBuildLog.setText("Open build log in editor");
+
+    viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+      @Override
+      public void selectionChanged(SelectionChangedEvent event) {
+        mntmOpenBuildLog.setEnabled(getSelectedElement() instanceof Project);
+      }
+    });
+
     viewer.setContentProvider(new ITreeContentProvider() {
 
       @Override
@@ -251,5 +283,26 @@ public class BuildProgressView extends ViewPart {
 
   protected boolean isProjectShown(Object object) {
     return failureFilter.select(null, null, object);
+  }
+
+  private Object getSelectedElement() {
+    IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+    return selection.getFirstElement();
+  }
+
+  private void openLogViewer() {
+    Object selection = getSelectedElement();
+    if (selection instanceof Project) {
+      Launch launch = (Launch) viewer.getInput();
+      Project project = (Project) selection;
+      File file = CORE.getLogFile(launch.getId(), project.getId());
+      IFileStore fileStore = EFS.getLocalFileSystem().getStore(file.toURI());
+      try {
+        IDE.openEditorOnFileStore(getSite().getPage(), fileStore);
+      } catch (PartInitException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      }
+    }
   }
 }
