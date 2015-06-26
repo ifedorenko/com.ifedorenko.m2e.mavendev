@@ -8,7 +8,6 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
@@ -46,6 +45,7 @@ import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.IBuildProgressListen
 import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.Launch;
 import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.MojoExecution;
 import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.Project;
+import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.Status;
 
 public class BuildProgressView extends ViewPart {
 
@@ -74,9 +74,12 @@ public class BuildProgressView extends ViewPart {
   private final ViewerFilter failureFilter = new ViewerFilter() {
     @Override
     public boolean select(Viewer viewer, Object parentElement, Object element) {
-      if (element instanceof Project && actionFailuresOnly.isChecked()) {
-        return ((Project) element)
-            .getStatus() == com.ifedorenko.m2e.mavendev.launch.ui.internal.model.Status.failed;
+      if (!actionFailuresOnly.isChecked()) {
+        return true;
+      }
+      if (element instanceof Project) {
+        Status status = ((Project) element).getStatus();
+        return status == Status.failed || status == Status.inprogress;
       }
       return true;
     }
@@ -278,7 +281,7 @@ public class BuildProgressView extends ViewPart {
     } finally {
       viewer.getTree().setRedraw(true);
     }
-    return Status.OK_STATUS;
+    return org.eclipse.core.runtime.Status.OK_STATUS;
   }
 
   protected boolean isProjectShown(Object object) {

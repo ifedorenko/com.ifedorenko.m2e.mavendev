@@ -12,4 +12,3 @@
 * exception handling (printStackTrace isn't it)
 * consider moving model to eventspy bundle, such that it can be serialized/deserialized with gson
   * alternatively, introduce message attribute name constants to share between UI and EventSpy
-* expand in-progress project subtrees, collapse after project build completion
