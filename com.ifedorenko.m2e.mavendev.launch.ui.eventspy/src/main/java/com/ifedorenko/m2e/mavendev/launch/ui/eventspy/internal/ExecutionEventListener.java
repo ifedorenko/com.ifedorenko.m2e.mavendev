@@ -92,8 +92,14 @@ public class ExecutionEventListener implements EventSpy, MessageSink {
           case MojoStarted:
             reportMojoStarted(executionEvent.getSession(), executionEvent.getMojoExecution());
             break;
+          case MojoSucceeded:
+          case MojoFailed:
+          case MojoSkipped:
+            reportMojoCompleted(executionEvent.getSession(), executionEvent.getMojoExecution(),
+                executionEvent.getType());
+            break;
           case ProjectStarted:
-            reportProjectStarted(executionEvent.getProject(), executionEvent.getType());
+            reportProjectStarted(executionEvent.getProject());
             break;
           case ProjectSucceeded:
           case ProjectFailed:
@@ -120,7 +126,7 @@ public class ExecutionEventListener implements EventSpy, MessageSink {
     sendMessage(data);
   }
 
-  private void reportProjectStarted(MavenProject project, Type type) throws IOException {
+  private void reportProjectStarted(MavenProject project) throws IOException {
     Map<String, Object> data = new HashMap<>();
     data.put("messageId", "projectStarted");
     data.put("projectId", projectGA(project));
@@ -136,6 +142,19 @@ public class ExecutionEventListener implements EventSpy, MessageSink {
     data.put("messageId", "mojoStarted");
     data.put("projectId", projectGA(project));
     data.put("executionId", execution.getExecutionId());
+
+    sendMessage(data);
+  }
+
+  private void reportMojoCompleted(MavenSession session, MojoExecution execution, Type type)
+      throws IOException {
+    MavenProject project = session.getCurrentProject();
+
+    Map<String, Object> data = new HashMap<>();
+    data.put("messageId", "mojoCompleted");
+    data.put("projectId", projectGA(project));
+    data.put("executionId", execution.getExecutionId());
+    data.put("executionStatus", type.name());
 
     sendMessage(data);
   }

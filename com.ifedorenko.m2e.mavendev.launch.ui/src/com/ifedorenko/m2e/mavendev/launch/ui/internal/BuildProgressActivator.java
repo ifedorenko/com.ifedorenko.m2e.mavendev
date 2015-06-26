@@ -90,6 +90,9 @@ public class BuildProgressActivator extends AbstractUIPlugin {
         case "mojoStarted":
           onMojoStarted(data);
           break;
+        case "mojoCompleted":
+          onMojoCompleted(data);
+          break;
         case "projectStarted":
           onProjectStarted(data);
           break;
@@ -138,7 +141,7 @@ public class BuildProgressActivator extends AbstractUIPlugin {
       case "ProjectFailed":
         status = Status.failed;
         break;
-      case "ProjectSkipped:":
+      case "ProjectSkipped":
         status = Status.skipped;
         break;
       default:
@@ -166,6 +169,36 @@ public class BuildProgressActivator extends AbstractUIPlugin {
     Project project = launch.getProject((String) data.get("projectId"));
     String executionId = (String) data.get("executionId");
     project.setExecution(new MojoExecution(executionId));
+
+    notifyListeners(project);
+  }
+
+  protected void onMojoCompleted(Map<String, Object> data) {
+    String launchId = (String) data.get("launchId");
+    String projectId = (String) data.get("projectId");
+    String executionId = (String) data.get("executionId");
+
+    Launch launch = launches.get(launchId);
+    Project project = launch.getProject(projectId);
+    MojoExecution execution = project.getExecution(executionId);
+
+    Status status;
+    switch ((String) data.get("executionStatus")) {
+      case "MojoSucceeded":
+        status = Status.succeeded;
+        break;
+      case "MojoFailed":
+        status = Status.failed;
+        break;
+      case "MojoSkipped":
+        status = Status.skipped;
+        break;
+      default:
+        // TODO log
+        return;
+    }
+
+    execution.setStatus(status);
 
     notifyListeners(project);
   }

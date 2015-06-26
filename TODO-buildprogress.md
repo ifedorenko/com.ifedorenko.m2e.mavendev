@@ -1,9 +1,8 @@
 ## IMMEDIATE
 
-* only show inprogress projects. again, having 100x of waiting/completed projects pollutes the view without adding much/any useful information
-
 ## FUTURE
 
+* filter view by project name
 * project/execution times
 * deal with multiple cuncurrent launches
   * launch can be pinned explicitly

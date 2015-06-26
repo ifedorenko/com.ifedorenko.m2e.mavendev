@@ -33,6 +33,12 @@ public class Project {
     }
   }
 
+  public MojoExecution getExecution(String executionId) {
+    synchronized (executions) {
+      return executions.get(executionId);
+    }
+  }
+
   public Status getStatus() {
     return status;
   }

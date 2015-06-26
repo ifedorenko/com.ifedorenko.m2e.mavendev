@@ -81,6 +81,10 @@ public class BuildProgressView extends ViewPart {
         Status status = ((Project) element).getStatus();
         return status == Status.failed || status == Status.inprogress;
       }
+      if (element instanceof MojoExecution) {
+        Status status = ((MojoExecution) element).getStatus();
+        return status == Status.failed || status == Status.inprogress;
+      }
       return true;
     }
   };
@@ -88,15 +92,12 @@ public class BuildProgressView extends ViewPart {
   private final Action actionFailuresOnly = new Action("Show failures only", IAction.AS_CHECK_BOX) {
     {
       setImageDescriptor(BuildProgressImages.FAILURE.getDescriptor());
+      setChecked(true);
     }
 
     @Override
     public void run() {
-      if (isChecked()) {
-        viewer.addFilter(failureFilter);
-      } else {
-        viewer.removeFilter(failureFilter);
-      }
+      applyFailuresOnlyFilter();
     }
   };
 
@@ -197,22 +198,30 @@ public class BuildProgressView extends ViewPart {
       @Override
       public Image getImage(Object element) {
         if (element instanceof Project) {
-          switch (((Project) element).getStatus()) {
-            case inprogress:
-              return BuildProgressImages.PROJECT_INPROGRESS.get();
-            case succeeded:
-              return BuildProgressImages.PROJECT_SUCCESS.get();
-            case failed:
-              return BuildProgressImages.PROJECT_FAILURE.get();
-            case skipped:
-              return BuildProgressImages.PROJECT_SKIPPED.get();
-            default:
-              return BuildProgressImages.PROJECT.get();
-          }
+          return getStatusImage(((Project) element).getStatus());
+        }
+        if (element instanceof MojoExecution) {
+          return getStatusImage(((MojoExecution) element).getStatus());
         }
         return null;
       }
+
+      protected Image getStatusImage(Status status) {
+        switch (status) {
+          case inprogress:
+            return BuildProgressImages.PROJECT_INPROGRESS.get();
+          case succeeded:
+            return BuildProgressImages.PROJECT_SUCCESS.get();
+          case failed:
+            return BuildProgressImages.PROJECT_FAILURE.get();
+          case skipped:
+            return BuildProgressImages.PROJECT_SKIPPED.get();
+          default:
+            return BuildProgressImages.PROJECT.get();
+        }
+      }
     });
+    applyFailuresOnlyFilter();
 
     IActionBars actionBars = getViewSite().getActionBars();
     IToolBarManager toolBar = actionBars.getToolBarManager();
@@ -271,6 +280,11 @@ public class BuildProgressView extends ViewPart {
           } else {
             viewer.refresh(object, true);
           }
+          if (actionFailuresOnly.isChecked()) {
+            viewer.expandToLevel(object, 2);
+          } else {
+            viewer.reveal(object);
+          }
 
           Launch launch = (Launch) viewer.getInput();
           BuildStatus status = launch.getStatus();
@@ -306,6 +320,14 @@ public class BuildProgressView extends ViewPart {
         // TODO Auto-generated catch block
         e1.printStackTrace();
       }
+    }
+  }
+
+  protected void applyFailuresOnlyFilter() {
+    if (actionFailuresOnly.isChecked()) {
+      viewer.addFilter(failureFilter);
+    } else {
+      viewer.removeFilter(failureFilter);
     }
   }
 }
