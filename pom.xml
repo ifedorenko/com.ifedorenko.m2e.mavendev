@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.takari.tycho</groupId>
     <artifactId>tycho-support</artifactId>
-    <version>0.15.0</version>
+    <version>0.16.0</version>
   </parent>  
   <groupId>com.ifedorenko.m2e</groupId>
   <artifactId>com.ifedorenko.m2e.mavendev-parent</artifactId>
@@ -13,6 +13,7 @@
 
   <properties>
     <repositoryPathId>mavendev</repositoryPathId>
+    <tychoVersion>0.23.0</tychoVersion>
   </properties>
 
   <repositories>
@@ -31,9 +32,25 @@
   <modules>
     <module>com.ifedorenko.m2e.mavendev</module>
     <module>com.ifedorenko.m2e.mavendev.junit.runtime</module>
+    <module>com.ifedorenko.m2e.mavendev.launch.ui</module>
+    <!--
+    must be built separately due to tycho limitations
+    
+        mvn clean install -f com.ifedorenko.m2e.mavendev.launch.ui.eventspy/pom.xml
+     
+    <module>com.ifedorenko.m2e.mavendev.launch.ui.eventspy</module>
+     -->
     <module>com.ifedorenko.m2e.mavendev.feature</module>
     <module>com.ifedorenko.m2e.mavendev.repository</module>
   </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.ifedorenko.m2e</groupId>
+      <artifactId>com.ifedorenko.m2e.mavendev.launch.ui.eventspy</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <pluginManagement>
