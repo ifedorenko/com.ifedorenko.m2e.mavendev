@@ -32,6 +32,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
@@ -50,6 +52,8 @@ import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.Status;
 public class BuildProgressView extends ViewPart {
 
   public static final String ID = "com.ifedorenko.m2e.mavendev.launch.ui.views.SampleView";
+
+  private static final String TAG_FAILURES_ONLY = "failuresOnly";
 
   private static final BuildProgressActivator CORE = BuildProgressActivator.getInstance();
 
@@ -92,7 +96,6 @@ public class BuildProgressView extends ViewPart {
   private final Action actionFailuresOnly = new Action("Show failures only", IAction.AS_CHECK_BOX) {
     {
       setImageDescriptor(BuildProgressImages.FAILURE.getDescriptor());
-      setChecked(true);
     }
 
     @Override
@@ -329,5 +332,24 @@ public class BuildProgressView extends ViewPart {
     } else {
       viewer.removeFilter(failureFilter);
     }
+  }
+
+  @Override
+  public void init(IViewSite site, IMemento memento) throws PartInitException {
+    super.init(site);
+
+    if (memento == null) {
+      return;
+    }
+
+    Boolean failuresOnly = memento.getBoolean(TAG_FAILURES_ONLY);
+    if (failuresOnly != null && failuresOnly.booleanValue()) {
+      actionFailuresOnly.setChecked(true);
+    }
+  }
+
+  @Override
+  public void saveState(IMemento memento) {
+    memento.putBoolean(TAG_FAILURES_ONLY, actionFailuresOnly.isChecked());
   }
 }
