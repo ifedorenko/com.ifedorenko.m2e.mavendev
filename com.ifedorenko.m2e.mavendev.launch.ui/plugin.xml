@@ -17,9 +17,9 @@
             name="Sample Category">
       </category>
       <view
-            category="com.ifedorenko.m2e.mavendev.launch.ui"
+            category="org.eclipse.m2e.core.views.repositories"
             class="com.ifedorenko.m2e.mavendev.launch.ui.internal.views.BuildProgressView"
-            icon="icons/sample.gif"
+            icon="icons/progress_view.png"
             id="com.ifedorenko.m2e.mavendev.launch.ui.views.SampleView"
             name="Maven Build">
       </view>
