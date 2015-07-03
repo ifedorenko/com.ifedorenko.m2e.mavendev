@@ -12,15 +12,11 @@
    </extension>
    <extension
          point="org.eclipse.ui.views">
-      <category
-            id="com.ifedorenko.m2e.mavendev.launch.ui"
-            name="Sample Category">
-      </category>
       <view
             category="org.eclipse.m2e.core.views.repositories"
             class="com.ifedorenko.m2e.mavendev.launch.ui.internal.views.BuildProgressView"
             icon="icons/progress_view.png"
-            id="com.ifedorenko.m2e.mavendev.launch.ui.views.SampleView"
+            id="com.ifedorenko.m2e.mavendev.launch.ui.views.buildProgressView"
             name="Maven Build">
       </view>
    </extension>
@@ -29,10 +25,10 @@
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaPerspective">
          <view
-               id="com.ifedorenko.m2e.mavendev.launch.ui.views.SampleView"
+               id="com.ifedorenko.m2e.mavendev.launch.ui.views.buildProgressView"
                ratio="0.5"
-               relationship="right"
-               relative="org.eclipse.ui.views.ProblemView">
+               relationship="stack"
+               relative="org.eclipse.jdt.ui.PackageExplorer">
          </view>
       </perspectiveExtension>
    </extension>

@@ -5,6 +5,7 @@ import static org.eclipse.m2e.core.internal.Bundles.getClasspathEntries;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -284,5 +285,9 @@ public class BuildProgressActivator extends AbstractUIPlugin {
 
   public File getLogFile(String launchId, String projectId) {
     return logWriter.getProjectFile(launchId, projectId);
+  }
+
+  public Collection<Launch> getLaunches() {
+    return launches.values();
   }
 }

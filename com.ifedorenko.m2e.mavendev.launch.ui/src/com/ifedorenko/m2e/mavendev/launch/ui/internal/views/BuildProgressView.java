@@ -51,7 +51,7 @@ import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.Status;
 
 public class BuildProgressView extends ViewPart {
 
-  public static final String ID = "com.ifedorenko.m2e.mavendev.launch.ui.views.SampleView";
+  public static final String ID = "com.ifedorenko.m2e.mavendev.launch.ui.views.buildProgressView";
 
   private static final String TAG_FAILURES_ONLY = "failuresOnly";
 
@@ -68,10 +68,7 @@ public class BuildProgressView extends ViewPart {
   private final IBuildProgressListener buildListener = new IBuildProgressListener() {
     @Override
     public void onUpdate(Object source) {
-      synchronized (refreshQueue) {
-        refreshQueue.add(source);
-      }
-      refreshJob.schedule(300L);
+      enqueueRefresh(source);
     }
   };
 
@@ -257,6 +254,7 @@ public class BuildProgressView extends ViewPart {
       }
     };
     refreshJob.setUser(false);
+    enqueueRefresh(this);
   }
 
 
@@ -270,12 +268,19 @@ public class BuildProgressView extends ViewPart {
     viewer.getTree().setRedraw(false);
     try {
       for (Object object : queue) {
-        if (object instanceof Launch) {
-          viewer.setInput(object);
-          BuildStatus status = ((Launch) object).getStatus();
-          progressBar.reset(status.hasFailures(), false /* stopped */,
-              status.getCompleted() /* tickDone */, status.getTotal() /* maximum */);
-        } else if (object instanceof Project) {
+        if (object == this) {
+          for (Launch launch : CORE.getLaunches()) {
+            setLaunch(launch);
+            break;
+          }
+        } else if (object instanceof Launch) {
+          setLaunch(object);
+        }
+        if (viewer.getInput() == null) {
+          // possible if view was created when no launch is running
+          continue;
+        }
+        if (object instanceof Project) {
           if (isProjectShown(object)) {
             // workaround apparent TreeViewer bug
             // filtered nodes are not revealed when filter state changes
@@ -299,6 +304,13 @@ public class BuildProgressView extends ViewPart {
       viewer.getTree().setRedraw(true);
     }
     return org.eclipse.core.runtime.Status.OK_STATUS;
+  }
+
+  protected void setLaunch(Object object) {
+    viewer.setInput(object);
+    BuildStatus status = ((Launch) object).getStatus();
+    progressBar.reset(status.hasFailures(), false /* stopped */,
+        status.getCompleted() /* tickDone */, status.getTotal() /* maximum */);
   }
 
   protected boolean isProjectShown(Object object) {
@@ -351,5 +363,12 @@ public class BuildProgressView extends ViewPart {
   @Override
   public void saveState(IMemento memento) {
     memento.putBoolean(TAG_FAILURES_ONLY, actionFailuresOnly.isChecked());
+  }
+
+  protected void enqueueRefresh(Object source) {
+    synchronized (refreshQueue) {
+      refreshQueue.add(source);
+    }
+    refreshJob.schedule(300L);
   }
 }
