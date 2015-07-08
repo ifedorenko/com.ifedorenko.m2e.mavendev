@@ -64,26 +64,25 @@ public class BuildProgressImages {
 
   private static class DecoratedImage implements ILazyImage {
 
-    private final SimpleImage baseImage;
-    private final SimpleImage overlayImage;
+    private final ILazyImage baseImage;
 
-    public DecoratedImage(SimpleImage baseImage, SimpleImage overlayImage) {
+    private final ILazyImage overlayImage;
+
+    public DecoratedImage(ILazyImage baseImage, ILazyImage overlayImage) {
       this.baseImage = baseImage;
       this.overlayImage = overlayImage;
     }
 
     @Override
     public Image get() {
-      ImageDescriptor[] overlays = new ImageDescriptor[5];
-      overlays[IDecoration.BOTTOM_LEFT] = overlayImage.getDescriptor();
-      ImageDescriptor descriptor = new DecorationOverlayIcon(baseImage.get(), overlays);
-
-      return UIPLUGIN.getResourceManager().createImage(descriptor);
+      return UIPLUGIN.getResourceManager().createImage(getDescriptor());
     }
 
     @Override
     public ImageDescriptor getDescriptor() {
-      throw new UnsupportedOperationException();
+      ImageDescriptor[] overlays = new ImageDescriptor[5];
+      overlays[IDecoration.BOTTOM_LEFT] = overlayImage.getDescriptor();
+      return new DecorationOverlayIcon(baseImage.get(), overlays);
     }
   }
 
