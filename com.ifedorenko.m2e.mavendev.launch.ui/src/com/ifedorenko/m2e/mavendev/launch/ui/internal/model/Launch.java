@@ -59,4 +59,10 @@ public class Launch {
   public String getId() {
     return id;
   }
+
+  public void terminated() {
+    for (Project project : projects.values()) {
+      project.terminated();
+    }
+  }
 }

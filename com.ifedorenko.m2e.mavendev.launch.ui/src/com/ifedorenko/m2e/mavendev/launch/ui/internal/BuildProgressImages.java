@@ -32,6 +32,14 @@ public class BuildProgressImages {
 
   public static final ILazyImage FAILURE = create("failure.gif");
 
+  public static final ILazyImage PROGRESSVIEW = create("progressview.png");
+
+  public static final ILazyImage PROGRESSVIEW_FAILURE = create("progressview_failure.png");
+
+  public static final ILazyImage PROGRESSVIEW_INPROGRESS = create("progressview_inprogress.png");
+
+  public static final ILazyImage PROGRESSVIEW_SUCCESS = create("progressview_success.png");
+
   //
   // boring implementation follows
   //

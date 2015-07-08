@@ -39,11 +39,26 @@ public class Project {
     }
   }
 
-  public Status getStatus() {
+  public synchronized Status getStatus() {
     return status;
   }
 
-  public void setStatus(Status status) {
+  public synchronized void setStatus(Status status) {
     this.status = status;
+  }
+
+  public void terminated() {
+    synchronized (this) {
+      if (status == Status.inprogress) {
+        status = Status.skipped;
+      }
+    }
+
+    synchronized (executions) {
+      for (MojoExecution execution : executions.values()) {
+        execution.terminated();
+      }
+    }
+
   }
 }

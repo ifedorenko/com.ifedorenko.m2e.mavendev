@@ -77,7 +77,18 @@ public class BuildProgressActivator extends AbstractUIPlugin {
     public void launchesAdded(ILaunch[] launches) {}
 
     @Override
-    public void launchesTerminated(ILaunch[] launches) {}
+    public void launchesTerminated(ILaunch[] launches) {
+      for (ILaunch ilaunch : launches) {
+        String launchId = ilaunch.getAttribute(KEY_LAUNCHID);
+        if (launchId == null) {
+          continue;
+        }
+        Launch launch = BuildProgressActivator.this.launches.get(launchId);
+        if (launch != null) {
+          onLaunchTerminated(launch);
+        }
+      }
+    }
   };
 
   private final BuildProgressListenerServer buildListener = new BuildProgressListenerServer() {
@@ -218,6 +229,13 @@ public class BuildProgressActivator extends AbstractUIPlugin {
     launch.setProjects(projects);
 
     notifyListeners(launch);
+  }
+
+  protected void onLaunchRemoved() {}
+
+  protected void onLaunchTerminated(Launch launch) {
+    launch.terminated();
+    notifyListeners(new Object());
   }
 
   @Override

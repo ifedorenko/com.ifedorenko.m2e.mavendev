@@ -10,7 +10,6 @@ public class BuildStatus {
 
   private final int skipped;
 
-
   public BuildStatus(int total, int succeeded, int failed, int skipped) {
     this.total = total;
     this.succeeded = succeeded;
@@ -28,5 +27,9 @@ public class BuildStatus {
 
   public int getCompleted() {
     return succeeded + failed;
+  }
+
+  public int getInprogress() {
+    return total - failed - succeeded - skipped;
   }
 }

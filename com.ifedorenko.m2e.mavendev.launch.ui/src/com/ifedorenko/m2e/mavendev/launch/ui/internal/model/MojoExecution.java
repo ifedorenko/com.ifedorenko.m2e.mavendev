@@ -12,12 +12,17 @@ public class MojoExecution {
     return id;
   }
 
-  public Status getStatus() {
+  public synchronized Status getStatus() {
     return status;
   }
 
-  public void setStatus(Status status) {
+  public synchronized void setStatus(Status status) {
     this.status = status;
   }
 
+  public synchronized void terminated() {
+    if (status == Status.inprogress) {
+      status = Status.skipped;
+    }
+  }
 }

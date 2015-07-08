@@ -45,6 +45,7 @@ import org.eclipse.ui.progress.UIJob;
 
 import com.ifedorenko.m2e.mavendev.launch.ui.internal.BuildProgressActivator;
 import com.ifedorenko.m2e.mavendev.launch.ui.internal.BuildProgressImages;
+import com.ifedorenko.m2e.mavendev.launch.ui.internal.BuildProgressImages.ILazyImage;
 import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.BuildStatus;
 import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.IBuildProgressListener;
 import com.ifedorenko.m2e.mavendev.launch.ui.internal.model.Launch;
@@ -336,6 +337,20 @@ public class BuildProgressView extends ViewPart {
           applyViewerFilters();
         }
       }
+
+      Launch launch = (Launch) viewer.getInput();
+      ILazyImage titleImage = BuildProgressImages.PROGRESSVIEW;
+      if (launch != null) {
+        BuildStatus status = launch.getStatus();
+        if (status.hasFailures()) {
+          titleImage = BuildProgressImages.PROGRESSVIEW_FAILURE;
+        } else if (status.getInprogress() > 0) {
+          titleImage = BuildProgressImages.PROGRESSVIEW_INPROGRESS;
+        } else {
+          titleImage = BuildProgressImages.PROGRESSVIEW_SUCCESS;
+        }
+      }
+      setTitleImage(titleImage.get());
     } finally {
       viewer.getTree().setRedraw(true);
     }

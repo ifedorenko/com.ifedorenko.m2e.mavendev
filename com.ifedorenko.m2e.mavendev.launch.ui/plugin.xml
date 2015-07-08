@@ -15,7 +15,7 @@
       <view
             category="org.eclipse.m2e.core.views.repositories"
             class="com.ifedorenko.m2e.mavendev.launch.ui.internal.views.BuildProgressView"
-            icon="icons/progress_view.png"
+            icon="icons/progressview.png"
             id="com.ifedorenko.m2e.mavendev.launch.ui.views.buildProgressView"
             name="Maven Build">
       </view>
