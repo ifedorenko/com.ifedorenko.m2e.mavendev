@@ -22,6 +22,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -30,6 +32,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
@@ -57,13 +60,23 @@ public class BuildProgressView extends ViewPart {
 
   private static final BuildProgressActivator CORE = BuildProgressActivator.getInstance();
 
+  private static final Object EVENT_REFILTER = new Object() {
+    public String toString() {
+      return "EVENT_REFILTER";
+    }
+  };
+
   private TreeViewer viewer;
+
+  private GreenRedProgressBar progressBar;
+
+  private Text nameFilterControl;
+
+  private String nameFilterText;
 
   private final List<Object> refreshQueue = new ArrayList<>();
 
   private UIJob refreshJob;
-
-  private GreenRedProgressBar progressBar;
 
   private final IBuildProgressListener buildListener = new IBuildProgressListener() {
     @Override
@@ -90,6 +103,17 @@ public class BuildProgressView extends ViewPart {
     }
   };
 
+  private final ViewerFilter nameFilter = new ViewerFilter() {
+    @Override
+    public boolean select(Viewer viewer, Object parentElement, Object element) {
+      if (element instanceof Project) {
+        return ((Project) element).getId().contains(nameFilterText);
+      }
+
+      return true;
+    }
+  };
+
   private final Action actionFailuresOnly = new Action("Show failures only", IAction.AS_CHECK_BOX) {
     {
       setImageDescriptor(BuildProgressImages.FAILURE.getDescriptor());
@@ -97,7 +121,7 @@ public class BuildProgressView extends ViewPart {
 
     @Override
     public void run() {
-      applyFailuresOnlyFilter();
+      enqueueRefresh(EVENT_REFILTER);
     }
   };
 
@@ -110,6 +134,16 @@ public class BuildProgressView extends ViewPart {
 
     progressBar = new GreenRedProgressBar(parent);
     progressBar.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+    nameFilterControl = new Text(parent, SWT.BORDER);
+    nameFilterControl.addModifyListener(new ModifyListener() {
+      public void modifyText(ModifyEvent e) {
+        nameFilterText = nameFilterControl.getText();
+        enqueueRefresh(EVENT_REFILTER);
+      }
+    });
+    nameFilterControl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+    nameFilterControl.setMessage("type to filter projects by name");
 
     viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
     Tree tree = viewer.getTree();
@@ -221,7 +255,7 @@ public class BuildProgressView extends ViewPart {
         }
       }
     });
-    applyFailuresOnlyFilter();
+    applyViewerFilters();
 
     IActionBars actionBars = getViewSite().getActionBars();
     IToolBarManager toolBar = actionBars.getToolBarManager();
@@ -298,6 +332,8 @@ public class BuildProgressView extends ViewPart {
           BuildStatus status = launch.getStatus();
           progressBar.reset(status.hasFailures(), false /* stopped */,
               status.getCompleted() /* tickDone */, status.getTotal() /* maximum */);
+        } else if (object == EVENT_REFILTER) {
+          applyViewerFilters();
         }
       }
     } finally {
@@ -338,11 +374,16 @@ public class BuildProgressView extends ViewPart {
     }
   }
 
-  protected void applyFailuresOnlyFilter() {
+  protected void applyViewerFilters() {
     if (actionFailuresOnly.isChecked()) {
       viewer.addFilter(failureFilter);
     } else {
       viewer.removeFilter(failureFilter);
+    }
+    if (nameFilterText != null && nameFilterText.length() > 2) {
+      viewer.addFilter(nameFilter);
+    } else {
+      viewer.removeFilter(nameFilter);
     }
   }
 
