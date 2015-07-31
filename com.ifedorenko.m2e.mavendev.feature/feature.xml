@@ -5,7 +5,7 @@
       version="0.4.0.qualifier"
       provider-name="Igor Fedorenko">
 
-   <description>
+   <description url="https://github.com/ifedorenko/com.ifedorenko.m2e.mavendev">
       Maven Development Tools is a collection of m2e extensions that enables 
 end-to-end debugging of Maven Plugins, Maven Core and their dependencies from
 m2e development workspace, without the need to install artifacts to the local
