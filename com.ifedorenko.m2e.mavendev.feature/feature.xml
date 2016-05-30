@@ -21,16 +21,13 @@ Maven repository.
    </license>
 
    <includes
-         id="com.ifedorenko.m2e.sourcelookup.feature"
-         version="0.0.0"/>
-
-   <includes
          id="io.takari.stats.m2e.feature"
          version="0.0.0"/>
 
    <requires>
       <import feature="org.eclipse.jdt" version="3.8.0" match="compatible"/>
       <import feature="org.sonatype.m2e.mavenarchiver.feature" version="0.15.0" match="compatible"/>
+      <import feature="com.ifedorenko.m2e.sourcelookup.feature" version="1.1.0"/>
    </requires>
 
    <plugin
