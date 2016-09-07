@@ -4,7 +4,7 @@
   <parent>
     <groupId>io.takari.tycho</groupId>
     <artifactId>tycho-support</artifactId>
-    <version>0.16.0</version>
+    <version>0.17.0</version>
   </parent>  
   <groupId>com.ifedorenko.m2e</groupId>
   <artifactId>com.ifedorenko.m2e.mavendev-parent</artifactId>
@@ -13,14 +13,15 @@
 
   <properties>
     <repositoryPathId>mavendev</repositoryPathId>
-    <tychoVersion>0.23.0</tychoVersion>
+    <tychoVersion>0.25.0</tychoVersion>
+    <m2e-core.url>${repoHost}/content/sites/m2e.extras/m2e/1.7.0/N/LATEST</m2e-core.url>
   </properties>
 
   <repositories>
     <repository>
       <id>sourcelookup</id>
       <layout>p2</layout>
-      <url>https://repository.takari.io/content/sites/m2e.extras/sourcelookup/1.1.0/N/LATEST</url>
+      <url>https://repository.takari.io/content/sites/m2e.extras/sourcelookup/1.2.0/N/LATEST</url>
     </repository>
     <repository>
       <id>takaristats</id>
