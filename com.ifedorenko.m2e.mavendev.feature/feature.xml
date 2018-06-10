@@ -21,10 +21,6 @@ Maven repository.
    </license>
 
    <includes
-         id="com.ifedorenko.m2e.sourcelookup.feature"
-         version="0.0.0"/>
-
-   <includes
          id="io.takari.stats.m2e.feature"
          version="0.0.0"/>
 

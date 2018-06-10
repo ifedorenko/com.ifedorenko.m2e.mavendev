@@ -14,16 +14,11 @@
   <properties>
     <repositoryPathId>mavendev</repositoryPathId>
     <tychoVersion>1.0.0</tychoVersion>
-    <eclipse-repo.url>http://download.eclipse.org/releases/neon</eclipse-repo.url>
-    <m2e-core.url>${repoHost}/content/sites/m2e.extras/m2e/1.7.0/N/LATEST</m2e-core.url>
+    <eclipse-repo.url>http://download.eclipse.org/releases/photon</eclipse-repo.url>
+    <m2e-core.url>${repoHost}/content/sites/m2e.extras/m2e/1.9.0/N/LATEST</m2e-core.url>
   </properties>
 
   <repositories>
-    <repository>
-      <id>sourcelookup</id>
-      <layout>p2</layout>
-      <url>https://repository.takari.io/content/sites/m2e.extras/sourcelookup/1.2.0/N/LATEST</url>
-    </repository>
     <repository>
       <id>takaristats</id>
       <layout>p2</layout>
