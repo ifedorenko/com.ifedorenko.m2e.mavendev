@@ -235,7 +235,7 @@ public class MavenITLaunchDelegate
         Set<String> set = new HashSet<String>( entries.length );
         for ( IRuntimeClasspathEntry cpe : entries )
         {
-            if ( cpe.getClasspathProperty() == IRuntimeClasspathEntry.USER_CLASSES )
+            if ( isClasspthEntry(cpe) )
             {
                 addClasspath( cp, set, cpe.getLocation() );
             }
@@ -252,6 +252,11 @@ public class MavenITLaunchDelegate
 
         return cp.toString();
     }
+
+	private boolean isClasspthEntry(IRuntimeClasspathEntry cpe) {
+		int prop = cpe.getClasspathProperty();
+		return prop == IRuntimeClasspathEntry.USER_CLASSES || prop == IRuntimeClasspathEntry.CLASS_PATH;
+	}
 
     private void addClasspath( StringBuilder cp, Set<String> set, String location )
     {
