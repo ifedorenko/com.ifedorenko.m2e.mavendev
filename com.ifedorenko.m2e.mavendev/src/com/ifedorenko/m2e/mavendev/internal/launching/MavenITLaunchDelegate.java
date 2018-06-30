@@ -172,11 +172,12 @@ public class MavenITLaunchDelegate
     }
 
     @Override
-    public String[] getClasspath( ILaunchConfiguration configuration )
+    public String[][] getClasspathAndModulepath( ILaunchConfiguration configuration )
         throws CoreException
     {
-        List<String> cp = getBundleEntries( "com.ifedorenko.m2e.mavendev.junit.runtime", null );
-        return cp.toArray( new String[cp.size()] );
+		List<String> cp = getBundleEntries("com.ifedorenko.m2e.mavendev.junit.runtime", null);
+
+		return new String[][] { cp.toArray(new String[cp.size()]), new String[0], };
     }
 
     private List<String> getBundleEntries( String bundleId, String bundleRelativePath )
