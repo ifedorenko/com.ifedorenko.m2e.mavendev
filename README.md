@@ -32,8 +32,7 @@ installation!
 
 # Installation
 
-* Install "Maven Development Tools" feature from http://ifedorenko.github.com/m2e-extras/
-* Eclipse marketplace http://marketplace.eclipse.org/content/maven-development-tools
+There is currently no publicly available pre-built binaries (also see see [#14](https://github.com/ifedorenko/com.ifedorenko.m2e.mavendev/issues/14)).
 
 # Notes for Maven Plugin developers
 
